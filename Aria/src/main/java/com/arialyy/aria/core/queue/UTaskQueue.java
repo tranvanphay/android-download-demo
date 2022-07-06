@@ -71,7 +71,7 @@ public class UTaskQueue extends AbsTaskQueue<UploadTask, UTaskWrapper> {
           .createTask(wrapper, TaskSchedulers.getInstance());
       addTask(task);
     } else {
-      ALog.w(TAG, "任务已存在");
+      ALog.w(TAG, "task already exists\n");
     }
     return task;
   }

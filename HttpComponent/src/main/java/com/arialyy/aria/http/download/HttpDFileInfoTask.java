@@ -83,7 +83,7 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
       ConnectionHelp.setConnectParam(taskOption, conn);
       conn.setRequestProperty("Range", "bytes=" + 0 + "-");
       if (AriaConfig.getInstance().getDConfig().isUseHeadRequest()) {
-        ALog.d(TAG, "head请求");
+        ALog.d(TAG, "head request");
         conn.setRequestMethod("HEAD");
       }
       conn.setConnectTimeout(mConnectTimeOut);
@@ -91,7 +91,7 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
       handleConnect(conn);
     } catch (IOException e) {
       failDownload(new AriaHTTPException(
-          String.format("下载失败，filePath: %s, url: %s", mEntity.getFilePath(), mEntity.getUrl()),
+          String.format("download failed，filePath: %s, url: %s", mEntity.getFilePath(), mEntity.getUrl()),
           e), true);
     } finally {
       if (conn != null) {
@@ -142,13 +142,13 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
     if (lenAdapter == null) {
       lenAdapter = new FileLenAdapter();
     } else {
-      ALog.d(TAG, "使用自定义adapter");
+      ALog.d(TAG, "Use a custom adapter\n");
     }
     long len = lenAdapter.handleFileLen(conn.getHeaderFields());
 
     if (!FileUtil.checkMemorySpace(mEntity.getFilePath(), len)) {
       failDownload(new AriaHTTPException(
-          String.format("下载失败，内存空间不足；filePath: %s, url: %s", mEntity.getFilePath(),
+          String.format("Download failed, insufficient memory space；filePath: %s, url: %s", mEntity.getFilePath(),
               mEntity.getUrl())), false);
       return;
     }
@@ -197,7 +197,7 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
       if (!checkLen(len) && !isChunked) {
         if (len < 0) {
           failDownload(
-              new AriaHTTPException(String.format("任务下载失败，文件长度小于0， url: %s", mEntity.getUrl())),
+              new AriaHTTPException(String.format("The task download failed, the file length is less than 0， url: %s", mEntity.getUrl())),
               false);
         }
         return;
@@ -225,7 +225,7 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
         if (len < 0) {
           failDownload(
               new AriaHTTPException(
-                  String.format("任务下载失败，文件长度小于0， url: %s", mEntity.getUrl())),
+                  String.format("The task download failed, the file length is less than 0， url: %s", mEntity.getUrl())),
               false);
         }
         ALog.d(TAG, "len < 0");
@@ -242,16 +242,16 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
         || code == 307) {
       handleUrlReTurn(conn, conn.getHeaderField("Location"));
     } else if (code == 416) { // 处理0k长度的文件的情况
-      ALog.w(TAG, "文件长度为0，不支持断点");
+      ALog.w(TAG, "The file length is 0, breakpoints are not supported");
       mTaskWrapper.setSupportBP(false);
       mTaskWrapper.setNewTask(true);
       end = true;
     } else if (code >= HttpURLConnection.HTTP_BAD_REQUEST) {
       failDownload(new AriaHTTPException(
-          String.format("任务下载失败，errorCode：%s, url: %s", code, mEntity.getUrl())), false);
+          String.format("task download failed，errorCode：%s, url: %s", code, mEntity.getUrl())), false);
     } else {
       failDownload(new AriaHTTPException(
-          String.format("任务下载失败，errorCode：%s, errorMsg: %s, url: %s", code,
+          String.format("task download failed，errorCode：%s, errorMsg: %s, url: %s", code,
               conn.getResponseMessage(), mEntity.getUrl())), !CheckUtil.httpIsBadRequest(code));
     }
     if (isStop || isCancel) {
@@ -294,7 +294,7 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
           renameFile(newName);
         }
       } else {
-        ALog.w(TAG, "不识别的Content-Disposition参数");
+        ALog.w(TAG, "Unrecognized Content-Disposition parameter");
       }
     }
   }
@@ -304,19 +304,19 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
    */
   private void renameFile(String newName) {
     if (TextUtils.isEmpty(newName)) {
-      ALog.w(TAG, "重命名失败【服务器返回的文件名为空】");
+      ALog.w(TAG, "Rename failed [the file name returned by the server is empty]");
       return;
     }
-    ALog.d(TAG, String.format("文件重命名为：%s", newName));
+    ALog.d(TAG, String.format("file renamed to：%s", newName));
     File oldFile = new File(mEntity.getFilePath());
     String newPath = oldFile.getParent() + "/" + newName;
     if (!CheckUtil.checkDPathConflicts(false, newPath, mTaskWrapper.getRequestType())) {
-      ALog.e(TAG, "文件重命名失败");
+      ALog.e(TAG, "file renaming failed");
       return;
     }
     if (oldFile.exists()) {
       boolean b = oldFile.renameTo(new File(newPath));
-      ALog.d(TAG, String.format("文件重命名%s", b ? "成功" : "失败"));
+      ALog.d(TAG, String.format("file rename%s", b ? "success" : "fail"));
     }
     mEntity.setFileName(newName);
     mEntity.setFilePath(newPath);

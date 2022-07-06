@@ -139,7 +139,7 @@ public class ResumeThread implements Runnable {
 
       AbsTask task = queue.getTask(wrapper.getKey());
       if (task != null) {
-        ALog.w(TAG, "任务已存在");
+        ALog.w(TAG, "task already exists");
         continue;
       }
 

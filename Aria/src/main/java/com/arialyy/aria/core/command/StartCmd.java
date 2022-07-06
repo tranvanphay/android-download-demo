@@ -47,7 +47,7 @@ final public class StartCmd<T extends AbsTaskWrapper> extends AbsNormalCmd<T> {
   @Override public void executeCmd() {
     if (!canExeCmd) return;
     if (!NetUtils.isConnected(AriaConfig.getInstance().getAPP())) {
-      ALog.e(TAG, "启动任务失败，网络未连接");
+      ALog.e(TAG, "Start task failed, network not connected");
       return;
     }
     String mod;
@@ -76,9 +76,10 @@ final public class StartCmd<T extends AbsTaskWrapper> extends AbsNormalCmd<T> {
               || state == IEntity.STATE_COMPLETE) {
             resumeTask();
           } else if (state == IEntity.STATE_RUNNING) {
-            ALog.w(TAG, String.format("任务【%s】已经在运行", task.getTaskName()));
+            ALog.w(TAG, String.format("Task [%s] is already running", task.getTaskName()));
           } else {
-            ALog.d(TAG, String.format("开始新任务, 任务状态：%s", state));
+            ALog.d(TAG, String.format("\n" +
+                    "Start a new task, task status: %s", state));
             startTask();
           }
         } else {
@@ -106,7 +107,7 @@ final public class StartCmd<T extends AbsTaskWrapper> extends AbsNormalCmd<T> {
           }
         }
       } else {
-        ALog.w(TAG, String.format("任务【%s】已经在运行", task.getTaskName()));
+        ALog.w(TAG, String.format("Task [%s] is already running", task.getTaskName()));
       }
     }
     if (mQueue.getCurrentCachePoolNum() == 0) {

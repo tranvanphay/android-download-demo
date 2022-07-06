@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/android-download-demo/app/src/main/res/layout/item_download.xml" value="0.2546875" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.18" />
         <entry key="app/src/main/res/layout/item_download.xml" value="0.34322916666666664" />
       </map>

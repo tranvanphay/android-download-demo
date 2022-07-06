@@ -109,7 +109,7 @@ public abstract class AbsNormalLoader<T extends AbsTaskWrapper> implements ILoad
   @Override public void run() {
     checkComponent();
     if (isRunning()) {
-      ALog.d(TAG, String.format("任务【%s】正在执行，启动任务失败", mTaskWrapper.getKey()));
+      ALog.d(TAG, String.format("The task [%s] is being executed and failed to start the task", mTaskWrapper.getKey()));
       return;
     }
     startFlow();
@@ -125,7 +125,7 @@ public abstract class AbsNormalLoader<T extends AbsTaskWrapper> implements ILoad
     Looper.prepare();
     Looper looper = Looper.myLooper();
     if (looper == Looper.getMainLooper()) {
-      throw new IllegalThreadStateException("不能在主线程程序中调用Loader");
+      throw new IllegalThreadStateException("Loader cannot be called in main thread program");
     }
     isRuning = true;
     resetState();
@@ -155,7 +155,7 @@ public abstract class AbsNormalLoader<T extends AbsTaskWrapper> implements ILoad
     if (isBreak()) {
       return;
     }
-    ALog.d(TAG, String.format("启动定时器，delayTimer = %s, updateInterval = %s", delayTimer(),
+    ALog.d(TAG, String.format("start timer，delayTimer = %s, updateInterval = %s", delayTimer(),
         mUpdateInterval));
     closeTimer();
     try {
@@ -181,7 +181,7 @@ public abstract class AbsNormalLoader<T extends AbsTaskWrapper> implements ILoad
               Log.d(TAG, "running...");
               mListener.onProgress(mStateManager.getCurrentProgress());
             } else {
-              Log.d(TAG, "未知状态");
+              Log.d(TAG, "Unknown status");
             }
           } catch (Exception e) {
             e.printStackTrace();
@@ -189,7 +189,7 @@ public abstract class AbsNormalLoader<T extends AbsTaskWrapper> implements ILoad
         }
       }, delayTimer(), mUpdateInterval, TimeUnit.MILLISECONDS);
     } catch (Exception e) {
-      ALog.e(TAG, "启动定时器失败");
+      ALog.e(TAG, "Failed to start timer");
       e.printStackTrace();
     }
   }
@@ -211,7 +211,7 @@ public abstract class AbsNormalLoader<T extends AbsTaskWrapper> implements ILoad
    */
   protected void setUpdateInterval(long interval) {
     if (interval < 0) {
-      ALog.w(TAG, "更新间隔不能小于0，默认为1000毫秒");
+      ALog.w(TAG, "The update interval cannot be less than 0, the default is 1000 milliseconds");
       return;
     }
     mUpdateInterval = interval;
@@ -226,7 +226,7 @@ public abstract class AbsNormalLoader<T extends AbsTaskWrapper> implements ILoad
 
   @Override final public synchronized void cancel() {
     if (isCancel) {
-      ALog.d(TAG, String.format("任务【%s】正在删除，删除任务失败", mTaskWrapper.getKey()));
+      ALog.d(TAG, String.format("The task [%s] is being deleted, the task deletion failed", mTaskWrapper.getKey()));
       return;
     }
     if (mInfoTask != null){
@@ -301,7 +301,7 @@ public abstract class AbsNormalLoader<T extends AbsTaskWrapper> implements ILoad
    * 重试任务
    */
   public void retryTask() {
-    ALog.w(TAG, String.format("任务【%s】开始重试", mTaskWrapper.getKey()));
+    ALog.w(TAG, String.format("Task [%s] started to retry", mTaskWrapper.getKey()));
     startFlow();
   }
 
@@ -314,7 +314,7 @@ public abstract class AbsNormalLoader<T extends AbsTaskWrapper> implements ILoad
     if (isCancel || isStop) {
       //closeTimer();
       ALog.d(TAG, "isCancel = " + isCancel + ", isStop = " + isStop);
-      ALog.d(TAG, String.format("任务【%s】已停止或取消了", mTaskWrapper.getKey()));
+      ALog.d(TAG, String.format("The task [%s] has been stopped or canceled", mTaskWrapper.getKey()));
       return true;
     }
     return false;
@@ -325,16 +325,16 @@ public abstract class AbsNormalLoader<T extends AbsTaskWrapper> implements ILoad
    */
   protected void checkComponent() {
     if (mRecordHandler == null) {
-      throw new NullPointerException("任务记录组件为空");
+      throw new NullPointerException("Task record component is empty");
     }
     if (mInfoTask == null) {
-      throw new NullPointerException(("文件信息组件为空"));
+      throw new NullPointerException(("file info component is empty"));
     }
     if (mStateManager == null) {
-      throw new NullPointerException("任务状态管理组件为空");
+      throw new NullPointerException("Task state management component is empty");
     }
     if (mTTBuilder == null) {
-      throw new NullPointerException("线程任务组件为空");
+      throw new NullPointerException("Thread task component is empty");
     }
   }
 }

@@ -114,7 +114,7 @@ public class DTaskQueue extends AbsTaskQueue<DownloadTask, DTaskWrapper> {
           .createTask(wrapper, TaskSchedulers.getInstance());
       addTask(task);
     } else {
-      ALog.w(TAG, "任务已存在");
+      ALog.w(TAG, "task already exists\n");
     }
 
     return task;

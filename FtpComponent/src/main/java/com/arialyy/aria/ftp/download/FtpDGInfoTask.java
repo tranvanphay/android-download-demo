@@ -168,7 +168,7 @@ final class FtpDGInfoTask extends AbsFtpInfoTask<DownloadGroupEntity, DGTaskWrap
     String url =
         urlEntity.scheme + "://" + urlEntity.hostName + ":" + urlEntity.port + "/" + remotePath;
     if (checkEntityExist(url)) {
-      ALog.w(TAG, "子任务已存在，取消子任务的添加，url = " + url);
+      ALog.w(TAG, "Subtask already exists, cancel the addition of subtask，url = " + url);
       return;
     }
     DownloadEntity entity = new DownloadEntity();

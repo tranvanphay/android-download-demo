@@ -84,10 +84,10 @@ public class CheckUtil {
   public static boolean checkDPathConflicts(boolean isForceDownload, String filePath, int type) {
     if (DbEntity.checkDataExist(DownloadEntity.class, "downloadPath=?", filePath)) {
       if (!isForceDownload) {
-        ALog.e(TAG, String.format("下载失败，保存路径【%s】已经被其它任务占用，请设置其它保存路径", filePath));
+        ALog.e(TAG, String.format("The download failed, the save path [%s] has been occupied by other tasks, please set another save path", filePath));
         return false;
       } else {
-        ALog.w(TAG, String.format("保存路径【%s】已经被其它任务占用，当前任务将覆盖该路径的文件", filePath));
+        ALog.w(TAG, String.format("The save path [%s] is already occupied by other tasks, and the current task will overwrite the files in this path", filePath));
         RecordUtil.delTaskRecord(filePath, type, false, true);
         return true;
       }
@@ -106,10 +106,10 @@ public class CheckUtil {
   public static boolean checkUPathConflicts(boolean isForceUpload, String filePath, int type) {
     if (DbEntity.checkDataExist(UploadEntity.class, "filePath=?", filePath)) {
       if (!isForceUpload) {
-        ALog.e(TAG, String.format("上传失败，文件路径【%s】已经被其它任务占用，请设置其它文件路径", filePath));
+        ALog.e(TAG, String.format("Upload failed, the file path [%s] has been occupied by other tasks, please set another file path", filePath));
         return false;
       } else {
-        ALog.w(TAG, String.format("文件路径【%s】已经被其它任务占用，当前任务将覆盖该路径的文件", filePath));
+        ALog.w(TAG, String.format("The file path [%s] is already occupied by other tasks, and the current task will overwrite the file in this path", filePath));
         RecordUtil.delTaskRecord(filePath, type, false, true);
         return true;
       }
@@ -127,10 +127,10 @@ public class CheckUtil {
   public static boolean checkDGPathConflicts(boolean isForceDownload, String dirPath) {
     if (DbEntity.checkDataExist(DownloadGroupEntity.class, "dirPath=?", dirPath)) {
       if (!isForceDownload) {
-        ALog.e(TAG, String.format("下载失败，文件夹路径【%s】已经被其它任务占用，请设置其它文件路径", dirPath));
+        ALog.e(TAG, String.format("The download failed, the folder path [%s] has been occupied by other tasks, please set another file path", dirPath));
         return false;
       } else {
-        ALog.w(TAG, String.format("文件夹路径【%s】已经被其它任务占用，当前任务将覆盖该路径", dirPath));
+        ALog.w(TAG, String.format("The folder path [%s] is already occupied by other tasks, and the current task will overwrite this path", dirPath));
         DeleteDGRecord.getInstance().deleteRecord(dirPath, false, true);
         return true;
       }
@@ -150,7 +150,7 @@ public class CheckUtil {
     //    + "; isPrivate = "
     //    + Modifier.isPrivate(modifiers));
     if (!clazz.isMemberClass() || !Modifier.isStatic(modifiers)) {
-      ALog.e(TAG, String.format("为了防止内存泄漏，请使用静态的成员类(public static class %s)或文件类(%s.java)",
+      ALog.e(TAG, String.format("To prevent memory leaks, use static member classes (public static class %s) or file classes (%s.java)",
           clazz.getSimpleName(), clazz.getSimpleName()));
     }
   }
@@ -162,7 +162,7 @@ public class CheckUtil {
    * @param num 每页数量
    */
   public static void checkPageParams(int page, int num) {
-    if (page < 1 || num < 1) throw new NullPointerException("page和num不能小于1");
+    if (page < 1 || num < 1) throw new NullPointerException("page and num cannot be less than 1");
   }
 
   /**
@@ -172,7 +172,7 @@ public class CheckUtil {
    */
   public static boolean checkUrl(String url) {
     if (TextUtils.isEmpty(url)) {
-      ALog.e(TAG, "url不能为null");
+      ALog.e(TAG, "url cannot be null");
       return false;
     } else if (!url.startsWith("http") && !url.startsWith("ftp") && !url.startsWith("sftp")) {
       ALog.e(TAG, "url【" + url + "】错误");
@@ -180,7 +180,7 @@ public class CheckUtil {
     }
     int index = url.indexOf("://");
     if (index == -1) {
-      ALog.e(TAG, "url【" + url + "】不合法");
+      ALog.e(TAG, "url[\" + url + \"] is invalid");
     }
     return true;
   }
@@ -192,7 +192,7 @@ public class CheckUtil {
    */
   public static boolean checkDownloadUrlsIsEmpty(List<String> urls) {
     if (urls == null || urls.isEmpty()) {
-      ALog.e(TAG, "链接组不能为null");
+      ALog.e(TAG, "link group cannot be null");
       return true;
     }
     return false;
@@ -203,7 +203,7 @@ public class CheckUtil {
    */
   public static void checkUploadPathIsEmpty(String uploadPath) {
     if (TextUtils.isEmpty(uploadPath)) {
-      throw new IllegalArgumentException("上传地址不能为null");
+      throw new IllegalArgumentException("The upload address cannot be null");
     }
   }
 }

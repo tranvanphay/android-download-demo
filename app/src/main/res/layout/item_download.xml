@@ -1,32 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-    <RelativeLayout
+    <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginVertical="20dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="4dp">
+
+<RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <RelativeLayout
-            android:layout_toLeftOf="@+id/layoutButton"
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/layoutButton"
+        android:paddingHorizontal="10dp">
+
+        <TextView
+            android:id="@+id/fileName"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:text="File name" />
+
+       <RelativeLayout
+           android:id="@+id/layoutProgress"
+           android:layout_below="@id/fileName"
+           android:layout_width="match_parent"
+           android:orientation="horizontal"
+           android:layout_height="wrap_content">
+           <com.google.android.material.progressindicator.LinearProgressIndicator
+               android:id="@+id/progress"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_centerInParent="true"
+               android:layout_marginVertical="20dp"
+               android:layout_toLeftOf="@id/process"
+               android:max="100"
+               android:progress="50"
+               app:indicatorColor="@color/purple_200"
+               app:trackColor="@color/black"
+               app:trackThickness="8dp" />
+           <TextView
+               android:id="@+id/process"
+               android:layout_alignParentRight="true"
+               android:layout_centerInParent="true"
+               android:text="NaN"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"/>
+       </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layoutProgress">
 
             <TextView
-                android:id="@+id/fileName"
-                android:layout_width="match_parent"
+                android:id="@+id/downloaded"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="File name" />
+                android:text="200Mb" />
 
-            <com.google.android.material.progressindicator.LinearProgressIndicator
-                android:id="@+id/progress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:max="100"
-                android:progress="50"
-                android:layout_below="@id/fileName"
-                app:indicatorColor="@color/purple_200"
-                app:trackColor="@color/black"
-                app:trackThickness="8dp" />
-        </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
         <LinearLayout
             android:id="@+id/layoutButton"
             android:layout_alignParentRight="true"
@@ -47,4 +83,6 @@
                 android:layout_height="wrap_content"/>
         </LinearLayout>
     </RelativeLayout>
+</androidx.cardview.widget.CardView>
+
 

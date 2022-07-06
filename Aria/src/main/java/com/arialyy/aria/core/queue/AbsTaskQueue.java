@@ -94,7 +94,7 @@ public abstract class AbsTaskQueue<TASK extends AbsTask, TASK_WRAPPER extends Ab
 
   @Override public boolean taskIsRunning(String key) {
     if (TextUtils.isEmpty(key)) {
-      ALog.w(TAG, "key为空，无法确认任务是否执行");
+      ALog.w(TAG, "If the key is empty, it is impossible to confirm whether the task is executed or not.");
       return false;
     }
     TASK task = mExecutePool.getTask(key);
@@ -197,7 +197,7 @@ public abstract class AbsTaskQueue<TASK extends AbsTask, TASK_WRAPPER extends Ab
     int oldMaxSize = getOldMaxNum();
     int diff = maxNum - oldMaxSize;
     if (oldMaxSize == maxNum) {
-      ALog.w(TAG, "设置的下载任务数和配置文件的下载任务数一直，跳过");
+      ALog.w(TAG, "The set number of download tasks and the number of download tasks for configuration files are always, skip");
       return;
     }
     //设置的任务数小于配置任务数
@@ -234,7 +234,7 @@ public abstract class AbsTaskQueue<TASK extends AbsTask, TASK_WRAPPER extends Ab
     if (task == null) {
       task = mCachePool.getTask(key);
     }
-    ALog.i(TAG, "获取任务，key：" + key);
+    ALog.i(TAG, "get task，key：" + key);
     return task;
   }
 
@@ -262,10 +262,10 @@ public abstract class AbsTaskQueue<TASK extends AbsTask, TASK_WRAPPER extends Ab
       ALog.w(TAG, "create fail, task is null");
     }
     if (mExecutePool.taskExits(task.getKey())) {
-      ALog.w(TAG, String.format("任务【%s】执行中", task.getKey()));
+      ALog.w(TAG, String.format("The task [%s] is being executed", task.getKey()));
       return;
     }
-    ALog.i(TAG, "添加任务，key：" + task.getKey());
+    ALog.i(TAG, "add task，key：" + task.getKey());
     mCachePool.removeTask(task);
     mExecutePool.putTask(task);
     task.getTaskWrapper().getEntity().setFailNum(0);
@@ -293,7 +293,7 @@ public abstract class AbsTaskQueue<TASK extends AbsTask, TASK_WRAPPER extends Ab
       case IEntity.STATE_STOP:
       case IEntity.STATE_OTHER:
       case IEntity.STATE_FAIL:
-        ALog.w(TAG, String.format("停止任务【%s】失败，原因：已停止", task.getTaskName()));
+        ALog.w(TAG, String.format("Failed to stop task [%s], reason: stopped", task.getTaskName()));
         if (taskIsRunning(task.getKey())) {
           removeTaskFormQueue(task.getKey());
           if (ThreadTaskManager.getInstance().taskIsRunning(task.getKey())) {
@@ -302,10 +302,10 @@ public abstract class AbsTaskQueue<TASK extends AbsTask, TASK_WRAPPER extends Ab
         }
         break;
       case IEntity.STATE_CANCEL:
-        ALog.w(TAG, String.format("停止任务【%s】失败，原因：任务已删除", task.getTaskName()));
+        ALog.w(TAG, String.format("Failed to stop task [%s], reason: task has been deleted", task.getTaskName()));
         break;
       case IEntity.STATE_COMPLETE:
-        ALog.w(TAG, String.format("停止任务【%s】失败，原因：已完成", task.getTaskName()));
+        ALog.w(TAG, String.format("Failed to stop task [%s], reason: completed", task.getTaskName()));
         break;
     }
 
@@ -317,13 +317,14 @@ public abstract class AbsTaskQueue<TASK extends AbsTask, TASK_WRAPPER extends Ab
   @Override public void removeTaskFormQueue(String key) {
     TASK task = mExecutePool.getTask(key);
     if (task != null) {
-      ALog.d(TAG, String.format("从执行池删除任务【%s】%s", task.getTaskName(),
-          (mExecutePool.removeTask(task) ? "成功" : "失败")));
+      ALog.d(TAG, String.format("Deleting task【%s】from the execution pool succeeded %s ", task.getTaskName(),
+          (mExecutePool.removeTask(task) ? "success" : "fail")));
     }
     task = mCachePool.getTask(key);
     if (task != null) {
-      ALog.d(TAG, String.format("从缓存池删除任务【%s】%s", task.getTaskName(),
-          (mCachePool.removeTask(task) ? "成功" : "失败")));
+      ALog.d(TAG, String.format("\n" +
+                      "Delete tasks from cache pool【%s】%s", task.getTaskName(),
+          (mCachePool.removeTask(task) ? "success" : "fail")));
     }
   }
 
@@ -338,7 +339,7 @@ public abstract class AbsTaskQueue<TASK extends AbsTask, TASK_WRAPPER extends Ab
       case IEntity.STATE_POST_PRE:
       case IEntity.STATE_PRE:
       case IEntity.STATE_RUNNING:
-        ALog.w(TAG, String.format("任务【%s】没有停止，即将重新下载", task.getTaskName()));
+        ALog.w(TAG, String.format("The task [%s] has not stopped and will be downloaded again", task.getTaskName()));
         task.stop(TaskSchedulerType.TYPE_STOP_NOT_NEXT);
         task.start();
         break;
@@ -349,10 +350,10 @@ public abstract class AbsTaskQueue<TASK extends AbsTask, TASK_WRAPPER extends Ab
         task.start();
         break;
       case IEntity.STATE_CANCEL:
-        ALog.e(TAG, String.format("任务【%s】重试失败，原因：任务已删除", task.getTaskName()));
+        ALog.e(TAG, String.format("The task [%s] failed to retry, the reason: the task has been deleted", task.getTaskName()));
         break;
       case IEntity.STATE_COMPLETE:
-        ALog.e(TAG, String.format("任务【%s】重试失败，原因：已完成", task.getTaskName()));
+        ALog.e(TAG, String.format("Task [%s] failed to retry, reason: completed", task.getTaskName()));
         break;
     }
   }

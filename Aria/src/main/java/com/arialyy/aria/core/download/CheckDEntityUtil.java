@@ -51,7 +51,7 @@ public class CheckDEntityUtil implements ICheckEntityUtil {
   @Override
   public boolean checkEntity() {
     if (mWrapper.getErrorEvent() != null) {
-      ALog.e(TAG, String.format("任务操作失败，%s", mWrapper.getErrorEvent().errorMsg));
+      ALog.e(TAG, String.format("task operation failed，%s", mWrapper.getErrorEvent().errorMsg));
       return false;
     }
 
@@ -88,12 +88,12 @@ public class CheckDEntityUtil implements ICheckEntityUtil {
         && action == FeatureController.ACTION_CREATE) {
       if (mEntity.getFileSize() == 0) {
         ALog.w(TAG,
-            "由于m3u8协议的特殊性质，无法有效快速获取到正确到文件长度，如果你需要显示文件中长度，你需要自行设置文件长度：.asM3U8().asVod().setFileSize(xxx)");
+            "Due to the special nature of the m3u8 protocol, it is impossible to obtain the correct file length effectively and quickly. If you need to display the length in the file, you need to set the file length yourself: .asM3U8().asVod().setFileSize(xxx)");
       }
     } else if (mWrapper.getRequestType() == ITaskWrapper.M3U8_LIVE
         && action != FeatureController.ACTION_CANCEL) {
       if (file.exists()) {
-        ALog.w(TAG, "对于直播来说，每次下载都是一个新文件，所以你需要设置新都文件路径，否则Aria框架将会覆盖已下载的文件");
+        ALog.w(TAG, "For live broadcast, each download is a new file, so you need to set the new file path, otherwise Aria framework will overwrite the downloaded file");
         file.delete();
       }
     }
@@ -101,22 +101,22 @@ public class CheckDEntityUtil implements ICheckEntityUtil {
     if (action != FeatureController.ACTION_CANCEL
         && mWrapper.getM3U8Params().getHandler(IOptionConstant.bandWidthUrlConverter) != null
         && bandWidth == 0) {
-      ALog.w(TAG, "你已经设置了码率url转换器，但是没有设置码率，Aria框架将采用第一个获取到的码率");
+      ALog.w(TAG, "You have set the bitrate url converter, but not the bitrate, the Aria framework will use the first bitrate obtained");
     }
   }
 
   private boolean checkFilePath() {
     String filePath = mWrapper.getTempFilePath();
     if (TextUtils.isEmpty(filePath)) {
-      ALog.e(TAG, "下载失败，文件保存路径为null");
+      ALog.e(TAG, "Download failed, file save path is null");
       return false;
     }
     if (!FileUtil.canWrite(new File(filePath).getParent())){
-      ALog.e(TAG, String.format("路径【%s】不可写", filePath));
+      ALog.e(TAG, String.format("Path [%s] is not writable", filePath));
       return false;
     }
     if (!filePath.startsWith("/")) {
-      ALog.e(TAG, String.format("下载失败，文件保存路径【%s】错误", filePath));
+      ALog.e(TAG, String.format("The download failed, the file save path [%s] is wrong", filePath));
       return false;
     }
     File file = new File(filePath);
@@ -124,7 +124,7 @@ public class CheckDEntityUtil implements ICheckEntityUtil {
       if (mWrapper.getRequestType() == ITargetHandler.D_HTTP
           || mWrapper.getRequestType() == ITaskWrapper.M3U8_VOD) {
         ALog.e(TAG,
-            String.format("下载失败，保存路径【%s】不能为文件夹，路径需要是完整的文件路径，如：/mnt/sdcard/game.zip", filePath));
+            String.format("The download failed, the save path [%s] cannot be a folder, the path needs to be a complete file path, such as: /mnt/sdcard/game.zip", filePath));
         return false;
       } else if (mWrapper.getRequestType() == ITargetHandler.D_FTP) {
         filePath += mEntity.getFileName();
@@ -173,11 +173,11 @@ public class CheckDEntityUtil implements ICheckEntityUtil {
         if (oldFile.exists()) {
           // 处理普通任务的重命名
           RecordUtil.modifyTaskRecord(oldFile.getPath(), newFile.getPath(), mEntity.getTaskType());
-          ALog.i(TAG, String.format("将任务重命名为：%s", newFile.getName()));
+          ALog.i(TAG, String.format("Rename task to: %s", newFile.getName()));
         } else if (RecordUtil.blockTaskExists(oldFile.getPath())) {
           // 处理分块任务的重命名
           RecordUtil.modifyTaskRecord(oldFile.getPath(), newFile.getPath(), mEntity.getTaskType());
-          ALog.i(TAG, String.format("将分块任务重命名为：%s", newFile.getName()));
+          ALog.i(TAG, String.format("Rename chunked task to: %s", newFile.getName()));
         }
       }
     }
@@ -187,15 +187,15 @@ public class CheckDEntityUtil implements ICheckEntityUtil {
   private boolean checkUrl() {
     final String url = mEntity.getUrl();
     if (TextUtils.isEmpty(url)) {
-      ALog.e(TAG, "下载失败，url为null");
+      ALog.e(TAG, "Download failed, url is null");
       return false;
     } else if (!CheckUtil.checkUrl(url)) {
-      ALog.e(TAG, "下载失败，url【" + url + "】错误");
+      ALog.e(TAG, "Download failed, url [" + url + "】mistake");
       return false;
     }
     int index = url.indexOf("://");
     if (index == -1) {
-      ALog.e(TAG, "下载失败，url【" + url + "】不合法");
+      ALog.e(TAG, "Download failed, url [" + url + "】illegal");
       return false;
     }
     if (!TextUtils.isEmpty(mWrapper.getTempUrl())) {

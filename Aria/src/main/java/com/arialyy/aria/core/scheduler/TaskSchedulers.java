@@ -311,24 +311,24 @@ public class TaskSchedulers<TASK extends ITask> implements ISchedulers {
         }
         queue.removeTaskFormQueue(task.getKey());
         if (queue.getCurrentExePoolNum() < queue.getMaxTaskNum()) {
-          ALog.d(TAG, String.format("停止任务【%s】成功，尝试开始下一任务", task.getTaskName()));
+          ALog.d(TAG, String.format("Stop the task [%s] successfully, try to start the next task", task.getTaskName()));
           startNextTask(queue, task.getSchedulerType());
         } else {
-          ALog.d(TAG, String.format("停止任务【%s】成功", task.getTaskName()));
+          ALog.d(TAG, String.format("Stop task [%s] succeeded", task.getTaskName()));
         }
         break;
       case CANCEL:
         queue.removeTaskFormQueue(task.getKey());
         if (queue.getCurrentExePoolNum() < queue.getMaxTaskNum()) {
-          ALog.d(TAG, String.format("删除任务【%s】成功，尝试开始下一任务", task.getTaskName()));
+          ALog.d(TAG, String.format("The task [%s] was deleted successfully, try to start the next task", task.getTaskName()));
           startNextTask(queue, task.getSchedulerType());
         } else {
-          ALog.d(TAG, String.format("删除任务【%s】成功", task.getTaskName()));
+          ALog.d(TAG, String.format("Deleting task [%s] succeeded", task.getTaskName()));
         }
         break;
       case COMPLETE:
         queue.removeTaskFormQueue(task.getKey());
-        ALog.d(TAG, String.format("任务【%s】处理完成", task.getTaskName()));
+        ALog.d(TAG, String.format("The task [%s] has been processed", task.getTaskName()));
         startNextTask(queue, task.getSchedulerType());
         break;
       case FAIL:
@@ -428,7 +428,7 @@ public class TaskSchedulers<TASK extends ITask> implements ISchedulers {
   private void normalTaskCallback(int state, TASK task, NormalTaskListenerInterface<TASK> listener) {
     if (listener != null) {
       if (task == null && state != ISchedulers.CHECK_FAIL) {
-        ALog.e(TAG, "TASK 为null，回调失败");
+        ALog.e(TAG, "TASK is null, the callback fails");
         return;
       }
       switch (state) {
@@ -489,7 +489,7 @@ public class TaskSchedulers<TASK extends ITask> implements ISchedulers {
       mAriaConfig.getAPP().sendBroadcast(
           createData(state, type, task.getTaskWrapper().getEntity()));
     } else {
-      ALog.w(TAG, "发送广播失败，没有对应的任务");
+      ALog.w(TAG, "Failed to send broadcast, no corresponding task");
     }
   }
 
@@ -551,7 +551,7 @@ public class TaskSchedulers<TASK extends ITask> implements ISchedulers {
     TASK newTask = (TASK) queue.getNextTask();
     if (newTask == null) {
       if (queue.getCurrentExePoolNum() == 0) {
-        ALog.i(TAG, "没有等待中的任务");
+        ALog.i(TAG, "No pending tasks");
       }
       return;
     }
