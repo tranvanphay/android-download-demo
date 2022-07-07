@@ -1,5 +1,6 @@
 package com.phaytran.android_multi_download
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.os.Environment
@@ -25,6 +26,7 @@ class ListAdapter (private val context: Context, private val FileInfoList: Array
         return ViewHolder(view)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val path = Environment.getExternalStorageDirectory().path
         Log.e("Path::: ",path)

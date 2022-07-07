@@ -323,14 +323,14 @@ public class FileUtil {
    * @return {@code true} 合并成功，{@code false}合并失败
    */
   public static boolean mergeFile(String targetPath, List<String> subPaths) {
-    Log.d(TAG, "开始合并文件");
+    Log.d(TAG, "Start merging files\n");
     File file = new File(targetPath);
     FileOutputStream fos = null;
     FileChannel foc = null;
     long startTime = System.currentTimeMillis();
     try {
       if (file.exists() && file.isDirectory()) {
-        ALog.w(TAG, String.format("路径【%s】是文件夹，将删除该文件夹", targetPath));
+        ALog.w(TAG, String.format("The path [%s] is a folder, which will be deleted", targetPath));
         FileUtil.deleteDir(file);
       }
       if (!file.exists()) {
@@ -344,7 +344,7 @@ public class FileUtil {
       for (String subPath : subPaths) {
         File f = new File(subPath);
         if (!f.exists()) {
-          ALog.d(TAG, String.format("合并文件失败，文件【%s】不存在", subPath));
+          ALog.d(TAG, String.format("Failed to merge files, file [%s] does not exist", subPath));
           for (FileInputStream fis : streams) {
             fis.close();
           }
@@ -358,7 +358,7 @@ public class FileUtil {
         fileLen += f.length();
         fis.close();
       }
-      ALog.d(TAG, String.format("合并文件耗时：%sms", (System.currentTimeMillis() - startTime)));
+      ALog.d(TAG, String.format("Time spent merging files: %sms", (System.currentTimeMillis() - startTime)));
       return true;
     } catch (IOException e) {
       e.printStackTrace();
@@ -393,7 +393,7 @@ public class FileUtil {
     long startTime = System.currentTimeMillis();
     try {
       if (file.exists() && file.isDirectory()) {
-        ALog.w(TAG, String.format("路径【%s】是文件夹，将删除该文件夹", targetPath));
+        ALog.w(TAG, String.format("The path [%s] is a folder, which will be deleted\n", targetPath));
         FileUtil.deleteDir(file);
       }
       if (!file.exists()) {
@@ -409,7 +409,7 @@ public class FileUtil {
       for (String subPath : subPaths) {
         File f = new File(subPath);
         if (!f.exists()) {
-          ALog.d(TAG, String.format("合并文件失败，文件【%s】不存在", subPath));
+          ALog.d(TAG, String.format("Failed to merge files, file [%s] does not exist", subPath));
           for (FileInputStream fis : streams) {
             fis.close();
           }
@@ -426,7 +426,7 @@ public class FileUtil {
         i++;
       }
 
-      ALog.d(TAG, String.format("合并文件耗时：%sms，合并后的文件长度：%s", (System.currentTimeMillis() - startTime),
+      ALog.d(TAG, String.format("Time spent merging files: %sms, length of merged files: %s", (System.currentTimeMillis() - startTime),
           file.length()));
       return true;
     } catch (IOException e) {

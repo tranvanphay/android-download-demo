@@ -1,10 +1,20 @@
 package com.phaytran.android_multi_download
 
+import android.Manifest
+import android.app.Dialog
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
+import android.widget.Button
+import android.widget.EditText
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.arialyy.annotations.Download
@@ -14,14 +24,7 @@ import com.arialyy.frame.util.FileUtil
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
-    private val mData: ArrayList<FileInfo> = arrayListOf(
-        FileInfo(Int.MIN_VALUE,"FALLEN.mp4","http://download028.fshare.vn/dl/4bKsOcwlXC7MYWlr-b6ce0vREy3AWFUYSvQQbktUnLy+8wPs5X1KTnNbKdn0B6-oVa5aXzyu1wKQk+yO/%28Hard%20Sub%20Vi%E1%BB%87t%29%20-%20LONDON%20HAS%20FALLEN.mp4","path1",0,0,0,false),
-        FileInfo(Int.MIN_VALUE,"file2.mkv","http://download005.fshare.vn/dl/Alr85hQwF6VKOUfYUywp5FC6m4gIhhPMJ2ZEnaSkAtpUJPAiolMzhnyYDrpr8qMaYX8-NQgF3Dex-lgh/12.Days.of.Christmas.2020.1080p.WEB-DL.DD5.1.H.264-EVO%5BEtHD%5D.mkv","path2",0,0,0,false),
-        FileInfo(Int.MIN_VALUE,"file3.mkv","http://download034.fshare.vn/dl/0k2BmIOy7ZtYOCNd1kQnkY+ZmEKRXy3JC9KmNshSxvD+L3swpX+O25S0zktTy5ehoqpu2P9CJhRny2A4/12.Hour.Shift.2020.1080p.WEB-DL.DD5.1.H264-FGT.mkv","path3",0,0,0,false),
-        FileInfo(Int.MIN_VALUE,"file4.mkv","http://download024.fshare.vn/dl/YHeQKV0iAJ6R5PCg20Kui02VvY4UiUmB3tWKLw3p-nt0XHKz+Gph4o7tNTJTkiXNPgqLYmWUqSwE2z8P/1917.2019.1080p.HDRip.DD2.1.x264-FoE.mkv","path4",0,0,0,false),
-        FileInfo(Int.MIN_VALUE,"file5.mp4","http://download046.fshare.vn/dl/Rs24UoK2P8E2eq6DkRpqc1EC9r9+PnNNoTX0Scc82dsHYDD+d6o8RKO22fAq5wPUnkJZbzqaZKIYgOKJ/1996%20Police%20Story%20IV%20First%20Strike%20-%20Cau%20Chuyen%20Canh%20Sat%204%20%28Thanh%20Long%29%20%28SUBVIET%29.mp4","path5",0,0,0,false),
-
-    )
+    private val mData: ArrayList<FileInfo> = arrayListOf()
     private var mAdapter: ListAdapter? = null
     lateinit var mList: RecyclerView
 
@@ -29,11 +32,71 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         Aria.download(this).register()
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.dialog_add_link)
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.show()
+        registerDialogView(dialog)
+        setList()
+        permission()
+
+    }
+
+    fun registerDialogView(dialog:Dialog){
+        val editText = dialog.findViewById<EditText>(R.id.link)
+        val btnOk = dialog.findViewById<Button>(R.id.ok)
+        val btnAdd = dialog.findViewById<Button>(R.id.btnAddLink)
+        btnOk.setOnClickListener { dialog.dismiss() }
+        btnAdd.setOnClickListener {
+            if(editText.text.isNotEmpty()){
+                val text = editText.text
+                mData.add(FileInfo(Int.MAX_VALUE,"file"+mData.size+text.substring(text.length-4),text.toString(),"",0,0,0,false))
+                mAdapter?.notifyDataSetChanged()
+                editText.text.clear()
+            }
+        }
+    }
+
+    fun permission(){
+        val permissions = arrayOf(
+            "android.permission.WRITE_EXTERNAL_STORAGE",
+            "android.permission.READ_PHONE_STATE",
+            "android.permission.SYSTEM_ALERT_WINDOW",
+            "android.permission.CAMERA"
+        )
+        val requestCode = 200
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(permissions, requestCode)
+        }
+        requestPermission()
+    }
+
+    private fun requestPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ),
+                1
+            )
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                1
+            )
+        }
+    }
+
+    fun setList(){
         mAdapter = ListAdapter(this, mData)
         mList = findViewById(R.id.view_download)
         mList.layoutManager = LinearLayoutManager(this)
         mList.adapter = mAdapter
-
     }
 
     @Download.onTaskStart fun taskStart (task: DownloadTask){
