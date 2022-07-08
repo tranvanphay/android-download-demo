@@ -2,7 +2,9 @@ package com.phaytran.android_multi_download
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Build
+import android.os.Bundle
 import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.arialyy.aria.core.Aria
 import com.arialyy.aria.core.task.DownloadTask
@@ -33,11 +36,25 @@ class ListAdapter (private val context: Context, private val FileInfoList: Array
         val FileInfo = FileInfoList[position]
         holder.tvFileInfoName.text = FileInfo.fileName
         holder.btnDownload.setOnClickListener {
-            Aria.download(getContext())
-                .load(FileInfo.url)
-                .ignoreFilePathOccupy()
-                .setFilePath("$path/Download/${FileInfo.fileName}")
-                .create()
+//            Aria.download(getContext())
+//                .load(FileInfo.url)
+//                .ignoreFilePathOccupy()
+//                .setFilePath("$path/Download/${FileInfo.fileName}")
+//                .create()
+
+            val url: String? = FileInfo.url
+            val fileName: String? = FileInfo.fileName
+            val fileId:Int? = FileInfo.taskID
+
+            val serviceIntent = Intent(context, DownloadService::class.java)
+            serviceIntent.putExtra("url", url)
+            serviceIntent.putExtra("fileName", fileName)
+            serviceIntent.putExtra("fileID", fileId)
+            serviceIntent.putExtra("path", path)
+            val bundle = Bundle()
+            bundle.putParcelableArrayList("listTask", FileInfoList)
+            serviceIntent.putExtras(bundle)
+            ContextCompat.startForegroundService(context, serviceIntent)
         }
 
         holder.btnPause.setOnClickListener {

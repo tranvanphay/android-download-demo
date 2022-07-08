@@ -2,12 +2,9 @@ package com.phaytran.android_multi_download
 
 import android.Manifest
 import android.app.Dialog
-import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
@@ -20,8 +17,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.arialyy.annotations.Download
 import com.arialyy.aria.core.Aria
 import com.arialyy.aria.core.task.DownloadTask
-import com.arialyy.frame.util.FileUtil
-import java.io.File
 
 class MainActivity : AppCompatActivity() {
     private val mData: ArrayList<FileInfo> = arrayListOf()
@@ -42,6 +37,8 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
+
     fun registerDialogView(dialog:Dialog){
         val editText = dialog.findViewById<EditText>(R.id.link)
         val btnOk = dialog.findViewById<Button>(R.id.ok)
@@ -50,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         btnAdd.setOnClickListener {
             if(editText.text.isNotEmpty()){
                 val text = editText.text
-                mData.add(FileInfo(Int.MAX_VALUE,"file"+mData.size+text.substring(text.length-4),text.toString(),"",0,0,0,false))
+                mData.add(FileInfo(mData.size+1,"file"+mData.size+text.substring(text.length-4),text.toString(),"",0,0,0,false))
                 mAdapter?.notifyDataSetChanged()
                 editText.text.clear()
             }
