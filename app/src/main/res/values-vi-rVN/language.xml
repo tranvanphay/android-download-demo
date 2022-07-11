@@ -11,5 +11,7 @@
     <string name="sts_complete">Thành công</string>
     <string name="sts_running">Đang tải</string>
     <string name="btn_cancel">Hủy</string>
+    <string name="btn_resume">Tiếp tục</string>
+    <string name="btn_pause">Tạm dừng</string>
 
 </resources>

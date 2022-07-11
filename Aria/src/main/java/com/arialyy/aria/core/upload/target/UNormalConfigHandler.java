@@ -48,9 +48,9 @@ class UNormalConfigHandler<TARGET extends AbsTarget> implements IConfigHandler {
     // 判断已存在的任务
     if (mTarget instanceof AbsNormalTarget) {
       if (taskId < 0) {
-        mWrapper.setErrorEvent(new ErrorEvent(taskId, "任务id为空"));
+        mWrapper.setErrorEvent(new ErrorEvent(taskId, "task id is empty"));
       } else if (mWrapper.getEntity().getId() < 0) {
-        mWrapper.setErrorEvent(new ErrorEvent(taskId, "任务信息不存在"));
+        mWrapper.setErrorEvent(new ErrorEvent(taskId, "Mission information does not exist"));
       }
     }
 

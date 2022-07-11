@@ -108,7 +108,7 @@ public abstract class BaseListener implements IEventListener {
     saveData(IEntity.STATE_CANCEL, -1);
     handleSpeed(0);
     if (mTask.getSchedulerType() != TaskSchedulerType.TYPE_CANCEL_AND_NOT_NOTIFY) {
-      ALog.d(TAG, "删除任务完成");
+      ALog.d(TAG, "Delete task completed");
       sendInState2Target(ISchedulers.CANCEL);
     }
   }

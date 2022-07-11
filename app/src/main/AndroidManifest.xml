@@ -32,6 +32,15 @@
         <service
             android:exported="true"
             android:name=".DownloadService" />
+        <receiver
+            android:exported="true"
+            android:name=".NotificationReceiver">
+            <intent-filter>
+                <action android:name="CANCEL_DOWNLOAD"/>
+                <action android:name="PAUSE_DOWNLOAD"/>
+                <action android:name="RESUME_DOWNLOAD"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

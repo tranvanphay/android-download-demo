@@ -44,7 +44,7 @@ class ListAdapter (private val context: Context, private val FileInfoList: Array
 
             val url: String? = FileInfo.url
             val fileName: String? = FileInfo.fileName
-            val fileId:Int? = FileInfo.taskID
+            val fileId:Int? = FileInfo.rowId
 
             val serviceIntent = Intent(context, DownloadService::class.java)
             serviceIntent.putExtra("url", url)

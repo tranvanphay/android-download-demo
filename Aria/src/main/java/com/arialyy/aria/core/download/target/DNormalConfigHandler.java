@@ -51,9 +51,9 @@ class DNormalConfigHandler<TARGET extends AbsTarget> implements IConfigHandler {
     // 判断已存在的任务
     if (mTarget instanceof AbsNormalTarget) {
       if (taskId < 0) {
-        mWrapper.setErrorEvent(new ErrorEvent(taskId, "任务id为空"));
+        mWrapper.setErrorEvent(new ErrorEvent(taskId, "task id is empty"));
       } else if (mWrapper.getEntity().getId() < 0) {
-        mWrapper.setErrorEvent(new ErrorEvent(taskId, "任务信息不存在"));
+        mWrapper.setErrorEvent(new ErrorEvent(taskId, "Mission information does not exist"));
       }
     }
 
@@ -66,16 +66,16 @@ class DNormalConfigHandler<TARGET extends AbsTarget> implements IConfigHandler {
 
   TARGET updateUrl(String newUrl) {
     if (TextUtils.isEmpty(newUrl)) {
-      ALog.e(TAG, "url更新失败，newUrl为null");
+      ALog.e(TAG, "url update failed, newUrl is null");
       return mTarget;
     }
     if (mEntity.getUrl().equals(newUrl)) {
-      ALog.e(TAG, "url更新失败，新的下载url和旧的url一致");
+      ALog.e(TAG, "The url update failed, the new download url is the same as the old url");
       return mTarget;
     }
     getWrapper().setRefreshInfo(true);
     getWrapper().setTempUrl(newUrl);
-    ALog.d(TAG, "更新url成功");
+    ALog.d(TAG, "The update url succeeded");
     return mTarget;
   }
 

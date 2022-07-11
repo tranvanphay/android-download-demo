@@ -88,7 +88,7 @@ class FailureTaskHandler<TASK extends ITask> {
         @Override public void run() {
           AbsEntity entity = task.getTaskWrapper().getEntity();
           if (entity.getFailNum() <= num) {
-            ALog.d(TAG, String.format("任务【%s】开始重试", task.getTaskName()));
+            ALog.d(TAG, String.format("Task [%s] started to retry", task.getTaskName()));
             queue.reTryStart(task);
           } else {
             queue.removeTaskFormQueue(task.getKey());

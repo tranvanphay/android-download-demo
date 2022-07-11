@@ -153,7 +153,7 @@ public abstract class AbsNormalTarget<TARGET extends AbsNormalTarget> extends Ab
   }
 
   /**
-   * 停止任务
+   * stop task
    */
   @Override
   public void stop() {

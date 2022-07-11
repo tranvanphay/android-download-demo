@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class FileInfo(
-    var taskID:Int? = Int.MIN_VALUE,
+    var rowId:Int? = Int.MIN_VALUE,
     var fileName: String?, var url:String?,
     var storagePath:String?, var percent: Int, var totalSize:Long,
     var downloaded:Long, var isCompleted:Boolean): Parcelable {
@@ -25,7 +25,7 @@ data class FileInfo(
     }
 
     override fun writeToParcel(p0: Parcel?, p1: Int) {
-        p0?.writeValue(taskID)
+        p0?.writeValue(rowId)
         p0?.writeString(fileName)
         p0?.writeString(url)
         p0?.writeString(storagePath)

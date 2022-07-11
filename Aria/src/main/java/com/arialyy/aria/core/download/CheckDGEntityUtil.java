@@ -97,7 +97,7 @@ public class CheckDGEntityUtil implements ICheckEntityUtil {
       }
       needModifyPath = true;
       mEntity.setDirPath(dirPath);
-      ALog.i(TAG, String.format("文件夹路径改变，将更新文件夹路径为：%s", dirPath));
+      ALog.i(TAG, String.format("The folder path is changed, the folder path will be updated to: /storage/emulated/0/Download/：%s", dirPath));
     }
     return true;
   }
@@ -179,7 +179,7 @@ public class CheckDGEntityUtil implements ICheckEntityUtil {
     if (action != FeatureController.ACTION_CANCEL
         && !mWrapper.isUnknownSize()
         && mEntity.getFileSize() == 0) {
-      ALog.e(TAG, "组合任务必须设置文件文件大小，默认需要强制设置文件大小。如果无法获取到总长度，请调用#unknownSize()来标志该组合任务");
+      ALog.e(TAG, "The combined task must set the file size, and the default file size needs to be set. If the total length cannot be obtained, call #unknownSize() to mark the combined task");
       return false;
     }
 

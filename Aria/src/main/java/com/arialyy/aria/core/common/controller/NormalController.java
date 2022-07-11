@@ -132,9 +132,9 @@ public final class NormalController extends FeatureController implements INormal
   @Override public void save() {
     setAction(ACTION_SAVE);
     if (!checkConfig()) {
-      ALog.e(TAG, "保存修改失败");
+      ALog.e(TAG, "Failed to save changes");
     } else {
-      ALog.i(TAG, "保存成功");
+      ALog.i(TAG, "Successfully saved");
     }
   }
 }

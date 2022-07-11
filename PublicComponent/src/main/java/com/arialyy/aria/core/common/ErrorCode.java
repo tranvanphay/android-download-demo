@@ -16,12 +16,12 @@
 package com.arialyy.aria.core.common;
 
 public enum ErrorCode {
-  ERROR_CODE_NORMAL(0, "正常"), ERROR_CODE_TASK_ID_NULL(1, "任务id为空的错误码"),
-  ERROR_CODE_URL_NULL(2, "url 为空"), ERROR_CODE_URL_INVALID(3, "url 无效"),
-  ERROR_CODE_PAGE_NUM(4, "page和num不能小于1"), ERROR_CODE_GROUP_URL_NULL(5, "组合任务url列表为空"),
-  ERROR_CODE_UPLOAD_FILE_NULL(7, "上传文件不存在"),
-  ERROR_CODE_MEMBER_WARNING(8, "为了防止内存泄漏，请使用静态的成员类(public static class xxx)或文件类(A.java)"),
-  ERROR_CODE_TASK_NOT_EXIST(9, "任务信息不存在");
+  ERROR_CODE_NORMAL(0, "normal"), ERROR_CODE_TASK_ID_NULL(1, "Error code with empty task id"),
+  ERROR_CODE_URL_NULL(2, "url is empty"), ERROR_CODE_URL_INVALID(3, "url is invalid"),
+  ERROR_CODE_PAGE_NUM(4, "page and num cannot be less than 1"), ERROR_CODE_GROUP_URL_NULL(5, "The combined task url list is empty"),
+  ERROR_CODE_UPLOAD_FILE_NULL(7, "Upload file does not exist"),
+  ERROR_CODE_MEMBER_WARNING(8, "To prevent memory leaks, use static member classes (public static class xxx) or file classes (A.java)"),
+  ERROR_CODE_TASK_NOT_EXIST(9, "Mission information does not exist");
 
   public int code;
   public String msg;

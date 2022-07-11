@@ -10,5 +10,7 @@
     <string name="sts_complete">Completed</string>
     <string name="sts_running">Downloading</string>
     <string name="btn_cancel">Cancel</string>
+    <string name="btn_resume">Resume</string>
+    <string name="btn_pause">Pause</string>
 
 </resources>

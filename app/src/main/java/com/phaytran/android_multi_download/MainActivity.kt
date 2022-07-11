@@ -129,7 +129,7 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.N)
     @Download.onTaskComplete
     fun taskComplete(task: DownloadTask) {
-        Log.e("Task complted main::: ", " ==> " + task.downloadEntity.fileName)
+        Log.e("Task completed main::: ", " ==> " + task.downloadEntity.fileName)
         mAdapter?.update(task)
         Aria.download(this).load(task.downloadEntity.id).removeRecord()
     }

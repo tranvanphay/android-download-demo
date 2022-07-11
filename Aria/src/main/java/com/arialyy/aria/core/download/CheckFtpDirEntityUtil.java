@@ -72,7 +72,7 @@ public class CheckFtpDirEntityUtil implements ICheckEntityUtil {
         file.mkdirs();
       }
       mEntity.setDirPath(dirPath);
-      ALog.i(TAG, String.format("文件夹路径改变，将更新文件夹路径为：%s", dirPath));
+      ALog.i(TAG, String.format("If the folder path is changed, the folder path will be updated to：%s", dirPath));
     }
     return true;
   }
