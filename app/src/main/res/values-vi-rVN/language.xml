@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">android-multi-download</string>
+    <string name="sts_pending">Đang chuẩn bị</string>
+    <string name="sts_start">Đang bắt đầu</string>
+    <string name="sts_wait">Đang chờ</string>
+    <string name="sts_resume">Đang tiếp tục</string>
+    <string name="sts_stop">Đã dừng</string>
+    <string name="sts_cancel">Đã hủy bỏ</string>
+    <string name="sts_faild">Không thành công, vui lòng kiểm tra lại kết nối internet</string>
+    <string name="sts_complete">Thành công</string>
+    <string name="sts_running">Đang tải</string>
+    <string name="btn_cancel">Hủy</string>
+
+</resources>

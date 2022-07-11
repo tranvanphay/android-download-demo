@@ -97,39 +97,39 @@ class MainActivity : AppCompatActivity() {
     }
 
     @Download.onTaskStart fun taskStart (task: DownloadTask){
-        Log.e("Task start::: ","===> " + task.downloadEntity.fileName)
+        Log.e("Task start main::: ","===> " + task.downloadEntity.fileName)
     }
 
     @Download.onWait
     fun taskWait(task: DownloadTask) {
-        Log.e("Task waiting ::: ", " ==> " + task.downloadEntity.fileName)
+        Log.e("Task waiting main::: ", " ==> " + task.downloadEntity.fileName)
     }
 
     @Download.onTaskResume
     fun taskResume(task: DownloadTask) {
-        Log.e("Task resume ::: ", " ==> " + task.downloadEntity.fileName)
+        Log.e("Task resume main::: ", " ==> " + task.downloadEntity.fileName)
     }
 
     @Download.onTaskStop
     fun taskStop(task: DownloadTask) {
-        Log.e("Task stop ::: ", " ==> " + task.downloadEntity.fileName)
+        Log.e("Task stop main::: ", " ==> " + task.downloadEntity.fileName)
     }
 
     @Download.onTaskCancel
     fun taskCancel(task: DownloadTask) {
-        Log.e("Task cancel ::: ", " ==> " + task.downloadEntity.fileName)
+        Log.e("Task cancel main::: ", " ==> " + task.downloadEntity.fileName)
     }
 
     @Download.onTaskFail
     fun taskFail(task: DownloadTask?) {
-        Log.e("Task failed ::: ", " ==> " + task?.downloadEntity?.fileName)
+        Log.e("Task failed main::: ", " ==> " + task?.downloadEntity?.fileName)
 
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     @Download.onTaskComplete
     fun taskComplete(task: DownloadTask) {
-        Log.e("Task complted ::: ", " ==> " + task.downloadEntity.fileName)
+        Log.e("Task complted main::: ", " ==> " + task.downloadEntity.fileName)
         mAdapter?.update(task)
         Aria.download(this).load(task.downloadEntity.id).removeRecord()
     }
@@ -138,7 +138,7 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.N)
     @Download.onTaskRunning
     fun taskRunning(task: DownloadTask) {
-        Log.e("Task running ::: ", task.downloadEntity.fileName+" ===> " + task.downloadEntity.currentProgress)
+        Log.e("Task running main::: ", task.downloadEntity.fileName+" ===> " + task.downloadEntity.currentProgress)
         mAdapter?.update(task)
 
     }

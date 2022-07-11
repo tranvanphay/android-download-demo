@@ -60,7 +60,7 @@ class ListAdapter (private val context: Context, private val FileInfoList: Array
         holder.btnPause.setOnClickListener {
             val downloadingEntity = Aria.download(getContext()).load(FileInfo.url).entity
             if(Aria.download(getContext()).load(downloadingEntity.id).isRunning){
-                Aria.download(getContext()).load(downloadingEntity.id).stop()
+                Aria.download(getContext()).load(downloadingEntity.id).cancel(false)
                 holder.btnPause.text = "Resume"
             }else {
                 Aria.download(getContext()).load(downloadingEntity.id).resume()

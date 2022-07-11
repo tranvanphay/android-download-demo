@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Multi download</string>
     <string name="sts_pending">Pending</string>
@@ -6,7 +7,7 @@
     <string name="sts_resume">Resume</string>
     <string name="sts_stop">Stopped</string>
     <string name="sts_cancel">Canceled</string>
-    <string name="sts_faild">Failed</string>
+    <string name="sts_faild">Failed, please check your internet connection</string>
     <string name="sts_complete">Completed</string>
     <string name="sts_running">Downloading</string>
     <string name="btn_cancel">Cancel</string>

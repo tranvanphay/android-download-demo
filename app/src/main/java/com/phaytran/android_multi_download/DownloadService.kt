@@ -9,10 +9,15 @@ import android.util.Log
 import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_DELETE
 import com.arialyy.annotations.Download
 import com.arialyy.aria.core.Aria
+import com.arialyy.aria.core.listener.ISchedulers
 import com.arialyy.aria.core.task.DownloadTask
+import com.arialyy.aria.util.CommonUtil
+import com.arialyy.frame.util.StringUtil
 import com.phaytran.android_multi_download.App.Companion.CHANNEL_ID
+import rx.functions.Action
 import java.io.File
 import java.security.AccessController.getContext
 
@@ -44,7 +49,7 @@ class DownloadService : Service() {
                 .setFilePath("$path/Download/$fileName")
                 .create()
 
-        val notificationBuilder = startNotification(fileName,notiId,"Pending...",0)
+        val notificationBuilder = startNotification(fileName,notiId,ISchedulers.PRE,0,null,"")
         if(!isCommandStart){
             startForeground(notiId, notificationBuilder.build())
             isCommandStart = true
@@ -53,12 +58,36 @@ class DownloadService : Service() {
         return START_NOT_STICKY
     }
 
-    private fun startNotification(fileName:String?,notificationID:Int,status:String,progress:Int):NotificationCompat.Builder{
+    private fun getStringStatus(status: Int):String{
+        when (status){
+            ISchedulers.PRE -> return getString(R.string.sts_pending)
+            ISchedulers.START -> return  getString(R.string.sts_start)
+            ISchedulers.WAIT -> return  getString(R.string.sts_wait)
+            ISchedulers.RESUME -> return  getString(R.string.sts_resume)
+            ISchedulers.STOP -> return  getString(R.string.sts_stop)
+            ISchedulers.CANCEL -> return  getString(R.string.sts_cancel)
+            ISchedulers.FAIL -> return  getString(R.string.sts_faild)
+            ISchedulers.COMPLETE -> return  getString(R.string.sts_complete)
+            ISchedulers.RUNNING -> return  getString(R.string.sts_running)
+
+        }
+        return "Exception"
+    }
+
+    private fun startNotification(fileName:String?,notificationID:Int,status:Int,progress:Int,speed:String?,currentDownloaded:String):NotificationCompat.Builder{
+        speed.let { if(it==null)"" }
         val mBuilder: NotificationCompat.Builder = NotificationCompat.Builder(this,CHANNEL_ID)
             .setSmallIcon(android.R.drawable.stat_sys_download) // notification icon
             .setContentTitle(fileName) // title for notification
-            .setContentText(status) // mess
+            .setContentText(getStringStatus(status) +status.let { if(it==ISchedulers.COMPLETE||it==ISchedulers.FAIL){
+                ""
+            }else {
+                " | "+currentDownloaded
+            }
+            }) // mess
             .setProgress(100,progress,false)// age for notification
+            .setSubText(speed)
+            .setVibrate(longArrayOf(0L))
             .setAutoCancel(false) // clear notification after click
             .setOngoing(true)
         val notifyIntent = Intent(this, MainActivity::class.java).apply {
@@ -71,14 +100,14 @@ class DownloadService : Service() {
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             mNotificationManager.notify(notificationID, mBuilder.build())
         }
-        return mBuilder;
+        return mBuilder
     }
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val serviceChannel = NotificationChannel(
                 CHANNEL_ID,
-                "Example Service Channel",
+                "DownloadService",
                 NotificationManager.IMPORTANCE_DEFAULT
             )
             val manager: NotificationManager = getSystemService(NotificationManager::class.java)
@@ -89,7 +118,7 @@ class DownloadService : Service() {
     @RequiresApi(Build.VERSION_CODES.N)
     @Download.onTaskStart fun taskStart (task: DownloadTask){
         Log.e("Task start::: ","===> " + task.downloadEntity.fileName)
-        updateNoti(task,"Starting...",false)
+        updateNoti(task,ISchedulers.START,null)
 
     }
 
@@ -97,7 +126,7 @@ class DownloadService : Service() {
     @Download.onWait
     fun taskWait(task: DownloadTask) {
         Log.e("Task waiting ::: ", " ==> " + task.downloadEntity.fileName)
-        updateNoti(task,"Waiting...",false)
+        updateNoti(task,ISchedulers.WAIT,null)
 
     }
 
@@ -118,9 +147,11 @@ class DownloadService : Service() {
         Log.e("Task cancel ::: ", " ==> " + task.downloadEntity.fileName)
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     @Download.onTaskFail
-    fun taskFail(task: DownloadTask?) {
-        Log.e("Task failed ::: ", " ==> " + task?.downloadEntity?.fileName)
+    fun taskFail(task: DownloadTask) {
+        Log.e("Task failed ::: ", " ==> " + task.downloadEntity?.fileName)
+        updateNoti(task,ISchedulers.FAIL,null)
 
     }
 
@@ -129,7 +160,7 @@ class DownloadService : Service() {
     fun taskComplete(task: DownloadTask) {
         Log.e("Task completed ::: ", " ==> " + task.downloadEntity.fileName)
         Aria.download(this).load(task.downloadEntity.id).removeRecord()
-        updateNoti(task,"Completed...",true)
+        updateNoti(task,ISchedulers.COMPLETE,null)
 
     }
 
@@ -138,7 +169,7 @@ class DownloadService : Service() {
     @Download.onTaskRunning
     fun taskRunning(task: DownloadTask) {
         Log.e("Task running ::: ", task.downloadEntity.fileName+" ===> " + task.downloadEntity.currentProgress)
-        updateNoti(task,"Downloading...",false)
+        updateNoti(task,ISchedulers.RUNNING,CommonUtil.formatFileSize(task.downloadEntity.speed.toDouble())+"/s")
     }
 
     override fun onDestroy() {
@@ -146,7 +177,8 @@ class DownloadService : Service() {
         Log.e("DownloadService ===> ","On destroyed")
     }
 
-    fun updateNoti(task:DownloadTask,status:String,isCompleted:Boolean) {
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun updateNoti(task:DownloadTask, status:Int,speed: String?) {
         val size: Long = task.fileSize
         val progress: Long = task.currentProgress
         val current = if (size == 0L) 0 else (progress * 100 / size).toInt()
@@ -155,20 +187,50 @@ class DownloadService : Service() {
         }
         Log.e("NotificationCheck","Object:: ${item?.percent} ::::: $current")
         if(item?.percent!=current){
-            item?.percent = current;
-            val notificationBuilder = startNotification(item?.fileName,item?.taskID!!,status,current)
-            if(isCompleted){
-                notificationBuilder.setAutoCancel(true)
-                notificationBuilder.setOngoing(false)
-                notificationBuilder.setSmallIcon(android.R.drawable.stat_sys_download_done)
+            item?.percent = current
+            val notificationBuilder = startNotification(item?.fileName,item?.taskID!!,status,current,speed,CommonUtil.formatFileSize(progress.toDouble())+"/"+CommonUtil.formatFileSize(size.toDouble()))
+            if(status==ISchedulers.COMPLETE){
+                stopNotificationAction(notificationBuilder,false)
+                if(Aria.download(getContext()).dRunningTask==null){
+                    stopForeground(Service.STOP_FOREGROUND_DETACH)
+                    stopSelf()
+                    Log.e("Phaydev::","Stop service")
+                }
             }
             val mNotificationManager =
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             mNotificationManager.notify(item.taskID!!, notificationBuilder.build())
         }
+        if(status==ISchedulers.FAIL){
+            val notificationBuilder = startNotification(item.fileName,item.taskID!!,status,current,speed,CommonUtil.formatFileSize(progress.toDouble())+"/"+CommonUtil.formatFileSize(size.toDouble()))
+            val mNotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            stopNotificationAction(notificationBuilder,false)
+            mNotificationManager.notify(item.taskID!!, notificationBuilder.build())
+
+            if(Aria.download(getContext()).dRunningTask==null){
+                stopForeground(Service.STOP_FOREGROUND_DETACH)
+                stopSelf()
+                Log.e("Phaydev::","Stop service")
+            }
+            Aria.download(getContext()).load(task.downloadEntity.id).cancel(true)
+        }
 
 
 
+    }
+
+    private fun stopNotificationAction(notificationBuilder:NotificationCompat.Builder,isFailed:Boolean){
+        notificationBuilder.setProgress(0,0,false)
+        notificationBuilder.setAutoCancel(true)
+        notificationBuilder.setOngoing(false)
+        isFailed.let {
+            if(it){
+                notificationBuilder.setSmallIcon(android.R.drawable.stat_notify_error)
+            }else {
+                notificationBuilder.setSmallIcon(android.R.drawable.stat_sys_download_done)
+            }
+        }
     }
 
     @Nullable
