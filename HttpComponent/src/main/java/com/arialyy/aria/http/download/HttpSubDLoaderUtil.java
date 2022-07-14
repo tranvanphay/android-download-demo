@@ -30,8 +30,8 @@ import com.arialyy.aria.core.loader.SubLoader;
  */
 final class HttpSubDLoaderUtil extends AbsSubDLoadUtil {
   /**
-   * @param schedulers 调度器
-   * @param needGetInfo {@code true} 需要获取文件信息。{@code false} 不需要获取文件信息
+   * @param schedulers scheduler
+   * @param needGetInfo {@code true} Need to get file information. {@code false} no need to get file info
    */
   HttpSubDLoaderUtil( Handler schedulers, boolean needGetInfo, String parentKey) {
     super(schedulers, needGetInfo, parentKey);

@@ -61,7 +61,7 @@ public final class HttpRecordHandler extends RecordHandler {
     tr.isComplete = false;
 
     tr.threadType = record.taskType;
-    //最后一个线程的结束位置即为文件的总长度
+    //The end of the last thread is the total length of the file
     if (threadId == (record.threadNum - 1)) {
       endL = getFileSize();
     }

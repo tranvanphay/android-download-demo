@@ -55,35 +55,35 @@ public class DeleteDRecord implements IDeleteRecord {
   @Override public void deleteRecord(String filePath, boolean removeTarget,
       boolean needRemoveEntity) {
     if (TextUtils.isEmpty(filePath)) {
-      throw new NullPointerException("删除记录失败，文件路径为空");
+      throw new NullPointerException("Failed to delete record, file path is empty");
     }
     if (!filePath.startsWith("/")) {
-      throw new IllegalArgumentException(String.format("文件路径错误，filePath：%s", filePath));
+      throw new IllegalArgumentException(String.format("file path error，filePath：%s", filePath));
     }
     DownloadEntity entity = DbEntity.findFirst(DownloadEntity.class, "downloadPath=?", filePath);
     if (entity == null) {
-      ALog.e(TAG, "删除下载记录失败，没有在数据库中找到对应的实体文件，filePath：" + filePath);
+      ALog.e(TAG, "Failed to delete the download record, the corresponding entity file was not found in the database，filePath：" + filePath);
       return;
     }
     deleteRecord(entity, removeTarget, needRemoveEntity);
   }
 
   /**
-   * @param absEntity 记录关联的实体
-   * @param needRemoveFile true，无论下载成功以否，都将删除下载下来的文件。false，只会删除下载任务没有完成的文件
-   * @param needRemoveEntity 是否需要删除实体
+   * @param absEntity record associated entity
+   * @param needRemoveFile true，Whether the download is successful or not, the downloaded files will be deleted. false, only the files that the download task has not completed will be deleted
+   * @param needRemoveEntity Whether the entity needs to be deleted
    */
   @Override
   public void deleteRecord(AbsEntity absEntity, boolean needRemoveFile, boolean needRemoveEntity) {
     if (absEntity == null) {
-      ALog.e(TAG, "删除下载记录失败，实体为空");
+      ALog.e(TAG, "Failed to delete download record, entity is empty");
       return;
     }
     DownloadEntity entity = (DownloadEntity) absEntity;
     final String filePath = entity.getFilePath();
     File targetFile = new File(filePath);
 
-    // 兼容以前版本
+    // Compatible with previous versions
     if (entity.getTaskType() == ITaskWrapper.M3U8_VOD
         || entity.getTaskType() == ITaskWrapper.M3U8_LIVE) {
       DeleteM3u8Record.getInstance().deleteRecord(entity, needRemoveFile, needRemoveEntity);
@@ -92,13 +92,13 @@ public class DeleteDRecord implements IDeleteRecord {
 
     TaskRecord record = DbDataHelper.getTaskRecord(entity.getFilePath(), entity.getTaskType());
     if (record == null) {
-      ALog.e(TAG, "删除下载记录失败，记录为空，将删除实体记录，filePath：" + entity.getFilePath());
+      ALog.e(TAG, "Failed to delete the download record, the record is empty, the entity record will be deleted，filePath：" + entity.getFilePath());
       FileUtil.deleteFile(targetFile);
       deleteEntity(needRemoveEntity, filePath);
       return;
     }
 
-    // 删除下载的线程记录和任务记录
+    // Delete downloaded thread records and task records
     DbEntity.deleteData(ThreadRecord.class, "taskKey=? AND threadType=?", filePath,
         String.valueOf(entity.getTaskType()));
     DbEntity.deleteData(TaskRecord.class, "filePath=? AND taskType=?", filePath,
@@ -121,7 +121,7 @@ public class DeleteDRecord implements IDeleteRecord {
   }
 
   /**
-   * 删除多线程分块下载的分块文件
+   * Delete chunked files for multithreaded chunked downloads
    */
   private void removeBlockFile(TaskRecord record) {
     for (int i = 0, len = record.threadNum; i < len; i++) {

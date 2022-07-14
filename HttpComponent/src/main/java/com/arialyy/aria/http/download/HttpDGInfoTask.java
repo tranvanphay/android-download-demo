@@ -32,7 +32,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 组合任务文件信息，用于获取长度未知时，组合任务的长度
+ * Combined task file information, used to obtain the length of the combined task when the length is unknown
  */
 public final class HttpDGInfoTask implements IInfoTask {
   private String TAG = CommonUtil.getClassName(this);
@@ -48,32 +48,32 @@ public final class HttpDGInfoTask implements IInfoTask {
   public interface DGInfoCallback extends Callback {
 
     /**
-     * 子任务失败
+     * subtask failed
      */
     void onSubFail(DownloadEntity subEntity, AriaHTTPException e, boolean needRetry);
 
     /**
-     * 组合任务停止
+     * Combination task stops
      */
     void onStop(long len);
   }
 
   /**
-   * 子任务回调
+   * Subtask callback
    */
   private Callback subCallback = new Callback() {
     @Override public void onSucceed(String url, CompleteInfo info) {
       count.getAndIncrement();
       checkGetSizeComplete(count.get(), failCount.get());
-      ALog.d(TAG, "获取子任务信息完成");
+      ALog.d(TAG, "Get subtask information completed");
     }
 
     @Override public void onFail(AbsEntity entity, AriaException e, boolean needRetry) {
-      ALog.e(TAG, String.format("获取文件信息失败，url：%s", ((DownloadEntity) entity).getUrl()));
+      ALog.e(TAG, String.format("Failed to get file information, url: %s", ((DownloadEntity) entity).getUrl()));
       count.getAndIncrement();
       failCount.getAndIncrement();
       ((DGInfoCallback) callback).onSubFail((DownloadEntity) entity, new AriaHTTPException(
-          String.format("子任务获取文件长度失败，url：%s", ((DownloadEntity) entity).getUrl())), needRetry);
+          String.format("Subtask failed to get file length, url: %s", ((DownloadEntity) entity).getUrl())), needRetry);
       checkGetSizeComplete(count.get(), failCount.get());
     }
   };
@@ -83,7 +83,7 @@ public final class HttpDGInfoTask implements IInfoTask {
   }
 
   /**
-   * 停止
+   * stop
    */
   @Override
   public void stop() {
@@ -101,14 +101,14 @@ public final class HttpDGInfoTask implements IInfoTask {
   }
 
   @Override public void run() {
-    // 如果是isUnknownSize()标志，并且获取大小没有完成，则直接回调onStop
+    // If it is the isUnknownSize() flag and the size acquisition is not completed, onStop will be called directly
     if (mPool != null && !getLenComplete) {
-      ALog.d(TAG, "获取长度未完成的情况下，停止组合任务");
+      ALog.d(TAG, "Stop combining tasks when getting length is not completed");
       mPool.shutdown();
       ((DGInfoCallback)callback).onStop(0);
       return;
     }
-    // 处理组合任务大小未知的情况
+    // Handling the case where the combined task size is unknown
     if (wrapper.isUnknownSize()) {
       mPool = Executors.newCachedThreadPool();
       getGroupSize();
@@ -131,7 +131,7 @@ public final class HttpDGInfoTask implements IInfoTask {
   }
 
   /*
-   * 获取组合任务大小，使用该方式获取到的组合任务大小，子任务不需要再重新获取文件大小
+   *Get the combined task size, use the combined task size obtained in this way, and subtasks do not need to re-obtain the file size
    */
   private void getGroupSize() {
     new Thread(new Runnable() {
@@ -141,7 +141,7 @@ public final class HttpDGInfoTask implements IInfoTask {
           if (subEntity.getFileSize() > 0) {
             count.getAndIncrement();
             if (subEntity.getCurrentProgress() < subEntity.getFileSize()) {
-              // 如果没有完成需要拷贝一份数据
+              // If it is not completed, a copy of the data is required
               cloneHeader(dTaskWrapper);
             }
             checkGetSizeComplete(count.get(), failCount.get());
@@ -157,16 +157,16 @@ public final class HttpDGInfoTask implements IInfoTask {
   }
 
   /**
-   * 检查组合任务大小是否获取完成，获取完成后取消阻塞，并设置组合任务大小
+   * Check whether the combined task size is completed, unblock after the acquisition is complete, and set the combined task size
    */
   private void checkGetSizeComplete(int count, int failCount) {
     if (isStop || isCancel) {
-      ALog.w(TAG, "任务已停止或已取消，isStop = " + isStop + ", isCancel = " + isCancel);
+      ALog.w(TAG, "Task stopped or canceled，isStop = " + isStop + ", isCancel = " + isCancel);
       notifyLock();
       return;
     }
     if (failCount == wrapper.getSubTaskWrapper().size()) {
-      callback.onFail(wrapper.getEntity(), new AriaHTTPException("获取子任务长度失败"), false);
+      callback.onFail(wrapper.getEntity(), new AriaHTTPException("Failed to get subtask length"), false);
       notifyLock();
       return;
     }
@@ -179,7 +179,7 @@ public final class HttpDGInfoTask implements IInfoTask {
       wrapper.getEntity().setFileSize(size);
       wrapper.getEntity().update();
       getLenComplete = true;
-      ALog.d(TAG, String.format("获取组合任务长度完成，组合任务总长度：%s，失败的子任务数：%s", size, failCount));
+      ALog.d(TAG, String.format("Get the length of the combined task completed, the total length of the combined task: %s, the number of failed subtasks: %s", size, failCount));
       callback.onSucceed(wrapper.getKey(), new CompleteInfo());
       notifyLock();
     }
@@ -192,13 +192,13 @@ public final class HttpDGInfoTask implements IInfoTask {
   }
 
   /**
-   * 子任务使用父包裹器的属性
+   * Subtasks use properties of parent wrapper
    */
   private void cloneHeader(DTaskWrapper taskWrapper) {
     HttpTaskOption groupOption = (HttpTaskOption) wrapper.getTaskOption();
     HttpTaskOption subOption = new HttpTaskOption();
 
-    // 设置属性
+    // set properties
     subOption.setFileLenAdapter(groupOption.getFileLenAdapter());
     subOption.setFileNameAdapter(groupOption.getFileNameAdapter());
     subOption.setUseServerFileName(groupOption.isUseServerFileName());

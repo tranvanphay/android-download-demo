@@ -24,7 +24,7 @@ import com.arialyy.aria.http.HttpTaskOption;
 
 /**
  * Created by AriaL on 2017/6/30.
- * 任务组下载工具
+ * Task Force Download Tool
  */
 public final class HttpDGLoaderUtil extends AbsGroupLoaderUtil {
 

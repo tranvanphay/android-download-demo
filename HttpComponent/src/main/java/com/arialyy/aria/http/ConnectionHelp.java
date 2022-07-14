@@ -54,7 +54,7 @@ public final class ConnectionHelp {
     Map<String, String> params = taskDelegate.getParams();
     if (params != null && taskDelegate.getRequestEnum() == RequestEnum.GET) {
       if (url.contains("?")) {
-        ALog.e(TAG, String.format("设置参数失败，url中已经有?，url: %s", url));
+        ALog.e(TAG, String.format("Failed to set parameters, there is already? in url, url: %s", url));
         return new URL(CommonUtil.convertUrl(url));
       }
       StringBuilder sb = new StringBuilder();

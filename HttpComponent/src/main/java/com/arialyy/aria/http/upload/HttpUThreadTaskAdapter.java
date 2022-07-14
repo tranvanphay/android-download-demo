@@ -57,7 +57,7 @@ final class HttpUThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
     File uploadFile = new File(getEntity().getFilePath());
     if (!uploadFile.exists()) {
       fail(new AriaHTTPException(
-          String.format("上传失败，文件不存在；filePath: %s, url: %s", getEntity().getFilePath(),
+          String.format("Upload failed, file does not exist; filePath: %s, url: %s", getEntity().getFilePath(),
               getEntity().getUrl())));
       return;
     }
@@ -76,10 +76,10 @@ final class HttpUThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
       mHttpConn.setRequestProperty("User-Agent", getUserAgent());
       mHttpConn.setConnectTimeout(getTaskConfig().getConnectTimeOut());
       mHttpConn.setReadTimeout(getTaskConfig().getIOTimeOut());
-      //内部缓冲区---分段上传防止oom
+      // Internal buffer---multipart upload to prevent oom
       mHttpConn.setChunkedStreamingMode(getTaskConfig().getBuffSize());
 
-      //添加Http请求头部
+      //Add HTTP request header
       Set<String> keys = mTaskOption.getHeaders().keySet();
       for (String key : keys) {
         mHttpConn.setRequestProperty(key, mTaskOption.getHeaders().get(key));
@@ -87,7 +87,7 @@ final class HttpUThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
       mOutputStream = mHttpConn.getOutputStream();
       PrintWriter writer =
           new PrintWriter(new OutputStreamWriter(mOutputStream, mTaskOption.getCharSet()), true);
-      // 添加参数
+      // Add parameters
       Map<String, String> params = mTaskOption.getParams();
       if (params != null && !params.isEmpty()) {
         for (String key : params.keySet()) {
@@ -95,7 +95,7 @@ final class HttpUThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
         }
       }
 
-      //添加文件上传表单字段
+      //Add file upload form field
       keys = mTaskOption.getFormFields().keySet();
       for (String key : keys) {
         addFormField(writer, key, mTaskOption.getFormFields().get(key));
@@ -106,7 +106,7 @@ final class HttpUThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
     } catch (Exception e) {
       e.printStackTrace();
       fail(new AriaHTTPException(
-          String.format("上传失败，filePath: %s, url: %s", getEntity().getFilePath(),
+          String.format("upload failed，filePath: %s, url: %s", getEntity().getFilePath(),
               getEntity().getUrl()), e));
     }
   }
@@ -137,7 +137,7 @@ final class HttpUThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
   }
 
   /**
-   * 添加文件上传表单字段
+   * Add file upload form field
    */
   private void addFormField(PrintWriter writer, String name, String value) {
     writer.append(PREFIX).append(BOUNDARY).append(LINE_END);
@@ -192,7 +192,7 @@ final class HttpUThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
     mOutputStream.flush();
     inputStream.close();
     writer.append(LINE_END).flush();
-    // 保证上传的文件和本地的一致，https://www.cnblogs.com/tugenhua0707/p/8975121.html
+    // Make sure the uploaded file is the same as the local one，https://www.cnblogs.com/tugenhua0707/p/8975121.html
     writer.append(PREFIX).append(BOUNDARY).append(PREFIX).append(LINE_END).flush();
   }
 

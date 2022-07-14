@@ -64,24 +64,24 @@ final class HttpDThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
       conn = ConnectionHelp.handleConnection(url, mTaskOption);
       if (mTaskWrapper.isSupportBP()) {
         ALog.d(TAG,
-            String.format("任务【%s】线程__%s__开始下载【开始位置 : %s，结束位置：%s】", getFileName(),
+            String.format("Task [%s] thread __%s__ started downloading [Start position: %s, End position: %s]", getFileName(),
                 getThreadRecord().threadId, getThreadRecord().startLocation,
                 getThreadRecord().endLocation));
         conn.setRequestProperty("Range",
             String.format("bytes=%s-%s", getThreadRecord().startLocation,
                 (getThreadRecord().endLocation - 1)));
       } else {
-        ALog.w(TAG, "该下载不支持断点");
+        ALog.w(TAG, "This download does not support breakpoints");
       }
       ConnectionHelp.setConnectParam(mTaskOption, conn);
       conn.setConnectTimeout(getTaskConfig().getConnectTimeOut());
-      conn.setReadTimeout(getTaskConfig().getIOTimeOut());  //设置读取流的等待时间,必须设置该参数
+      conn.setReadTimeout(getTaskConfig().getIOTimeOut());  //Set the waiting time for reading the stream, this parameter must be set
       if (mTaskOption.isChunked()) {
         conn.setDoInput(true);
         conn.setChunkedStreamingMode(0);
       }
       conn.connect();
-      // 传递参数
+      // pass parameters
       if (mTaskOption.getRequestEnum() == RequestEnum.POST) {
         Map<String, String> params = mTaskOption.getParams();
         if (params != null) {
@@ -105,11 +105,11 @@ final class HttpDThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
       } else if (getThreadConfig().isBlock) {
         readDynamicFile(is);
       } else {
-        //创建可设置位置的文件
+        //Create a file with a settable location
         file =
             new BufferedRandomAccessFile(getThreadConfig().tempFile, "rwd",
                 getTaskConfig().getBuffSize());
-        //设置每条线程写入文件的位置
+        //Set where each thread writes to the file
         if (getThreadRecord().startLocation > 0) {
           file.seek(getThreadRecord().startLocation);
         }
@@ -117,16 +117,16 @@ final class HttpDThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
         handleComplete();
       }
     } catch (MalformedURLException e) {
-      fail(new AriaHTTPException(String.format("任务【%s】下载失败，filePath: %s, url: %s", getFileName(),
+      fail(new AriaHTTPException(String.format("Task [%s] failed to download, filePath: %s, url: %s", getFileName(),
           getEntity().getFilePath(), getEntity().getUrl()), e), false);
     } catch (IOException e) {
-      fail(new AriaHTTPException(String.format("任务【%s】下载失败，filePath: %s, url: %s", getFileName(),
+      fail(new AriaHTTPException(String.format("Task [%s] failed to download, filePath: %s, url: %s", getFileName(),
           getEntity().getFilePath(), getEntity().getUrl()), e), true);
     } catch (ArrayIndexOutOfBoundsException e) {
-      fail(new AriaHTTPException(String.format("任务【%s】下载失败，filePath: %s, url: %s", getFileName(),
+      fail(new AriaHTTPException(String.format("Task [%s] failed to download, filePath: %s, url: %s", getFileName(),
           getEntity().getFilePath(), getEntity().getUrl()), e), false);
     } catch (Exception e) {
-      fail(new AriaHTTPException(String.format("任务【%s】下载失败，filePath: %s, url: %s", getFileName(),
+      fail(new AriaHTTPException(String.format("Task [%s] failed to download, filePath: %s, url: %s", getFileName(),
           getEntity().getFilePath(), getEntity().getUrl()), e), false);
     } finally {
       try {
@@ -147,7 +147,7 @@ final class HttpDThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
   }
 
   /**
-   * 读取chunked数据
+   * read chunked data
    */
   private void readChunked(InputStream is) {
     FileOutputStream fos = null;
@@ -168,7 +168,7 @@ final class HttpDThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
       handleComplete();
     } catch (IOException e) {
       fail(new AriaHTTPException(
-          String.format("文件下载失败，savePath: %s, url: %s", getEntity().getFilePath(),
+          String.format("File download failed, savePath: %s, url: %s", getEntity().getFilePath(),
               getThreadConfig().url), e), true);
     } finally {
       if (fos != null) {
@@ -182,7 +182,7 @@ final class HttpDThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
   }
 
   /**
-   * 动态长度文件读取方式
+   * Dynamic length file reading method
    */
   private void readDynamicFile(InputStream is) {
     FileOutputStream fos = null;
@@ -195,7 +195,7 @@ final class HttpDThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
       fic = Channels.newChannel(is);
 
       ByteBuffer bf = ByteBuffer.allocate(getTaskConfig().getBuffSize());
-      //如果要通过 Future 的 cancel 方法取消正在运行的任务，那么该任务必定是可以 对线程中断做出响应 的任务。
+      //If you want to cancel a running task through Future's cancel method, then the task must be a task that can respond to thread interruption.
 
       while (getThreadTask().isLive() && (len = fic.read(bf)) != -1) {
         if (getThreadTask().isBreak()) {
@@ -220,7 +220,7 @@ final class HttpDThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
       }
       handleComplete();
     } catch (IOException e) {
-      fail(new AriaHTTPException(String.format("文件下载失败，savePath: %s, url: %s", getEntity().getFilePath(),
+      fail(new AriaHTTPException(String.format("File download failed, savePath: %s, url: %s", getEntity().getFilePath(),
               getThreadConfig().url), e), true);
     } finally {
       try {
@@ -241,7 +241,7 @@ final class HttpDThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
   }
 
   /**
-   * 读取普通的文件流
+   * Read a normal file stream
    */
   private void readNormal(InputStream is, BufferedRandomAccessFile file)
       throws IOException {
@@ -260,7 +260,7 @@ final class HttpDThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
   }
 
   /**
-   * 处理完成配置文件的更新或事件回调
+   * Handle updates or event callbacks on completion of configuration files
    */
   private void handleComplete() {
     if (getThreadTask().isBreak()) {

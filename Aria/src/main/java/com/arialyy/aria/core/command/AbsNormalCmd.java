@@ -114,7 +114,7 @@ public abstract class AbsNormalCmd<T extends AbsTaskWrapper> extends AbsCmd<T> {
   }
 
   /**
-   * 删除任务
+   * delete task
    */
   void removeTask() {
     AbsTask task = getTask();
@@ -125,7 +125,7 @@ public abstract class AbsNormalCmd<T extends AbsTaskWrapper> extends AbsCmd<T> {
   }
 
   /**
-   * 删除任务
+   * delete task
    */
   void removeTask(AbsTaskWrapper wrapper) {
     AbsTask tempTask = getTask(wrapper.getKey());

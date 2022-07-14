@@ -71,7 +71,6 @@ class DownloadService : Service() {
             ISchedulers.FAIL -> return getString(R.string.sts_faild)
             ISchedulers.COMPLETE -> return getString(R.string.sts_complete)
             ISchedulers.RUNNING -> return getString(R.string.sts_running)
-
         }
         return "Exception"
     }
@@ -280,8 +279,8 @@ class DownloadService : Service() {
                     stopSelf()
                     Log.e("Phaydev::", "Stop service")
                 }
+                Aria.download(getContext()).load(task.downloadEntity.id).cancel(true)
             }
-            Aria.download(getContext()).load(task.downloadEntity.id).cancel(true)
         }
 
     }

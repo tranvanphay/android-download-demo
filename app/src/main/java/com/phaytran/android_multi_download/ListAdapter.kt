@@ -57,16 +57,16 @@ class ListAdapter (private val context: Context, private val FileInfoList: Array
             ContextCompat.startForegroundService(context, serviceIntent)
         }
 
-        holder.btnPause.setOnClickListener {
-            val downloadingEntity = Aria.download(getContext()).load(FileInfo.url).entity
-            if(Aria.download(getContext()).load(downloadingEntity.id).isRunning){
-                Aria.download(getContext()).load(downloadingEntity.id).cancel(false)
-                holder.btnPause.text = "Resume"
-            }else {
-                Aria.download(getContext()).load(downloadingEntity.id).resume()
-                holder.btnPause.text = "Pause"
-            }
-        }
+//        holder.btnPause.setOnClickListener {
+//            val downloadingEntity = Aria.download(getContext()).load(FileInfo.url).entity
+//            if(Aria.download(getContext()).load(downloadingEntity.id).isRunning){
+//                Aria.download(getContext()).load(downloadingEntity.id).cancel(false)
+//                holder.btnPause.text = "Resume"
+//            }else {
+//                Aria.download(getContext()).load(downloadingEntity.id).resume()
+//                holder.btnPause.text = "Pause"
+//            }
+//        }
 
         holder.process.progress = FileInfo.percent
         holder.processDownload.text = "${FileInfo.percent}%"

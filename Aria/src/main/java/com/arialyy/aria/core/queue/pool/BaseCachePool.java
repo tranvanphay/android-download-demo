@@ -62,15 +62,15 @@ public class BaseCachePool<TASK extends AbsTask> implements IPool<TASK> {
   @Override public boolean putTask(TASK task) {
     synchronized (LOCK) {
       if (task == null) {
-        ALog.e(TAG, "任务不能为空！！");
+        ALog.e(TAG, "Task cannot be empty! !");
         return false;
       }
       if (mCacheQueue.contains(task)) {
-        ALog.w(TAG, "任务【" + task.getTaskName() + "】进入缓存队列失败，原因：已经在缓存队列中");
+        ALog.w(TAG, "The task [" + task.getTaskName() + "] failed to enter the cache queue, reason: already in the cache queue");
         return false;
       } else {
         boolean s = mCacheQueue.offer(task);
-        ALog.d(TAG, "任务【" + task.getTaskName() + "】进入缓存队列" + (s ? "成功" : "失败"));
+        ALog.d(TAG, "Task【" + task.getTaskName() + "】enter the cache queue" + (s ? "success" : "fail"));
         return s;
       }
     }
@@ -104,7 +104,7 @@ public class BaseCachePool<TASK extends AbsTask> implements IPool<TASK> {
   @Override public boolean removeTask(TASK task) {
     synchronized (LOCK) {
       if (task == null) {
-        ALog.e(TAG, "任务不能为空");
+        ALog.e(TAG, "Task cannot be empty");
         return false;
       } else {
         return mCacheQueue.remove(task);
@@ -115,7 +115,7 @@ public class BaseCachePool<TASK extends AbsTask> implements IPool<TASK> {
   @Override public boolean removeTask(String key) {
     synchronized (LOCK) {
       if (TextUtils.isEmpty(key)) {
-        ALog.e(TAG, "请传入有效的下载链接");
+        ALog.e(TAG, "Please pass in a valid download link");
         return false;
       }
       return mCacheQueue.remove(getTask(key));

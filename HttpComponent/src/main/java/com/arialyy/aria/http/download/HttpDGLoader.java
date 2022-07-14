@@ -30,7 +30,7 @@ import com.arialyy.aria.exception.AriaHTTPException;
 import java.io.File;
 
 /**
- * http 组合任务加载器
+ * http Combined task loader
  */
 final class HttpDGLoader extends AbsGroupLoader {
   HttpDGLoader(AbsTaskWrapper groupWrapper, DownloadGroupListener listener) {

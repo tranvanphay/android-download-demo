@@ -37,8 +37,8 @@ import java.util.List;
  */
 final public class CancelAllCmd<T extends AbsTaskWrapper> extends AbsNormalCmd<T> {
   /**
-   * removeFile {@code true} 删除已经下载完成的任务，不仅删除下载记录，还会删除已经下载完成的文件，{@code false}
-   * 如果文件已经下载完成，只删除下载记录
+   * removeFile {@code true} Delete the tasks that have been downloaded, not only delete the download record, but also delete the files that have been downloaded，{@code false}
+   * If the file has already been downloaded, only delete the download record
    */
   public boolean removeFile = false;
 
@@ -57,7 +57,7 @@ final public class CancelAllCmd<T extends AbsTaskWrapper> extends AbsNormalCmd<T
   }
 
   /**
-   * 删除所有普通下载任务
+   * Remove all normal download tasks
    */
   private void removeAllDTask() {
     List<DownloadEntity> entities =

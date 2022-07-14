@@ -40,7 +40,7 @@ final class HttpULoader extends AbsNormalLoader<UTaskWrapper> {
   }
 
   /**
-   * @deprecated http 上传任务不需要设置这个
+   * @deprecated http Upload tasks do not need to set this
    */
   @Deprecated
   @Override public void addComponent(IInfoTask infoTask) {
@@ -61,8 +61,8 @@ final class HttpULoader extends AbsNormalLoader<UTaskWrapper> {
     List<IThreadTask> tt = mTTBuilder.buildThreadTask(mRecord,
         new Handler(looper, mStateManager.getHandlerCallback()));
     if (tt == null || tt.isEmpty()) {
-      ALog.e(TAG, "创建线程任务失败");
-      getListener().onFail(false, new AriaHTTPException("创建线程任务失败"));
+      ALog.e(TAG, "Failed to create thread task");
+      getListener().onFail(false, new AriaHTTPException("Failed to create thread task"));
       return;
     }
 
@@ -78,13 +78,13 @@ final class HttpULoader extends AbsNormalLoader<UTaskWrapper> {
 
   @Override protected void checkComponent() {
     if (mRecordHandler == null) {
-      throw new NullPointerException("任务记录组件为空");
+      throw new NullPointerException("Task record component is empty");
     }
     if (mStateManager == null) {
-      throw new NullPointerException("任务状态管理组件为空");
+      throw new NullPointerException("Task state management component is empty");
     }
     if (mTTBuilder == null) {
-      throw new NullPointerException("线程任务组件为空");
+      throw new NullPointerException("Thread task component is empty");
     }
   }
 

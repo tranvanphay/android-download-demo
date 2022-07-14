@@ -29,55 +29,55 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Http任务设置的信息，如：cookie、请求参数
+ * Information set by the Http task, such as: cookies, request parameters
  */
 public final class HttpTaskOption implements ITaskOption {
 
   private CookieManager cookieManager;
 
   /**
-   * 请求参数
+   * request parameter
    */
   private Map<String, String> params;
 
   /**
-   * http 请求头
+   * http request header
    */
   private Map<String, String> headers = new HashMap<>();
 
   /**
-   * 字符编码，默认为"utf-8"
+   * Character encoding, default is "utf-8"
    */
   private String charSet = "utf-8";
 
   /**
-   * 网络请求类型
+   * network request type
    */
   private RequestEnum requestEnum = RequestEnum.GET;
 
   /**
-   * 是否使用服务器通过content-disposition传递的文件名，内容格式{@code attachment; filename="filename.jpg"} {@code true}
-   * 使用
+   * Whether to use the filename passed by the server through content-disposition, the content format is {@code attachment; filename="filename.jpg"} {@code true}
+   * use
    */
   private boolean useServerFileName = false;
 
   /**
-   * 重定向链接
+   * redirect link
    */
   private String redirectUrl = "";
 
   /**
-   * 是否是chunk模式
+   * Whether it is chunk mode
    */
   private boolean isChunked = false;
   /**
-   * 文件上传需要的key
+   * The key required for file upload
    */
   private String attachment;
 
   private Proxy proxy;
   /**
-   * 文件上传表单
+   * file upload form
    */
   private Map<String, String> formFields = new HashMap<>();
 
@@ -92,7 +92,7 @@ public final class HttpTaskOption implements ITaskOption {
     return fileNameAdapter == null ? null : fileNameAdapter.get();
   }
   /**
-   * 如果是匿名内部类，完成后需要将adapter设置为空，否则会出现内存泄漏
+   * If it is an anonymous inner class, you need to set the adapter to be empty after completion, otherwise there will be a memory leak
    */
   public void setFileLenAdapter(IHttpFileLenAdapter fileLenAdapter) {
     this.fileLenAdapter = new SoftReference<>(fileLenAdapter);

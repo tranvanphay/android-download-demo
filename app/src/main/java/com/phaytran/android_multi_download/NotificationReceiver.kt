@@ -14,19 +14,20 @@ import java.security.AccessController.getContext
 class NotificationReceiver: BroadcastReceiver() {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onReceive(context: Context, intent: Intent) {
-        Log.e("NotificationReceiver:::","On Receiver")
         val action = intent.action
         val taskId:Long = intent.getLongExtra("taskID",0L)
+        Log.e("NotificationReceiver:::","On Receiver $taskId")
+
         if(DownloadService.CANCEL_DOWNLOAD==action){
             Log.e("Phaydev::: ",""+taskId)
             Aria.download(getContext()).load(taskId).cancel(true)
 //            shouldStopService(context)
         }else if(DownloadService.PAUSE_DOWNLOAD==action){
-            Log.e("NotificationReceiver:::","Pause download")
+            Log.e("NotificationReceiver:::","Pause download $taskId")
             Aria.download(getContext()).load(taskId).stop()
 //            Aria.download(getContext()).load(taskId).stop()
         }else if(DownloadService.RESUME_DOWNLOAD==action){
-            Log.e("NotificationReceiver:::","Resume download")
+            Log.e("NotificationReceiver:::","Resume download $taskId")
                 Aria.download(getContext()).load(taskId).resume(false)
         }
     }

@@ -29,7 +29,7 @@ import com.arialyy.aria.util.CommonUtil;
  */
 public abstract class AbsGroupCmd<T extends AbsGroupTaskWrapper> extends AbsCmd<T> {
   /**
-   * 需要控制的子任务url
+   * The subtask url that needs to be controlled
    */
   String childUrl;
 
@@ -45,9 +45,9 @@ public abstract class AbsGroupCmd<T extends AbsGroupTaskWrapper> extends AbsCmd<
   }
 
   /**
-   * 创建任务
+   * Create a task
    *
-   * @return 创建的任务
+   * @return task created
    */
   AbsTask createTask() {
     tempTask = (AbsGroupTask) mQueue.createTask(mTaskWrapper);
@@ -59,7 +59,7 @@ public abstract class AbsGroupCmd<T extends AbsGroupTaskWrapper> extends AbsCmd<
     if (tempTask == null) {
       createTask();
       if (tempTask.isComplete()) {
-        ALog.i(TAG, "任务已完成");
+        ALog.i(TAG, "task completed");
         return false;
       }
     }

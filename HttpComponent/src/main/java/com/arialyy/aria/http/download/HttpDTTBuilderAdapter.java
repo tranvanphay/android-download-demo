@@ -27,7 +27,7 @@ final class HttpDTTBuilderAdapter extends AbsNormalTTBuilderAdapter {
         File blockFile =
             new File(String.format(IRecordHandler.SUB_PATH, getTempFile().getPath(), i));
         if (blockFile.exists()) {
-          ALog.d(TAG, String.format("分块【%s】已经存在，将删除该分块", i));
+          ALog.d(TAG, String.format("The block [%s] already exists, the block will be deleted", i));
           FileUtil.deleteFile(blockFile);
         }
       }
@@ -45,7 +45,7 @@ final class HttpDTTBuilderAdapter extends AbsNormalTTBuilderAdapter {
       return true;
     } catch (IOException e) {
       e.printStackTrace();
-      ALog.e(TAG, String.format("下载失败，filePath: %s, url: %s", getEntity().getFilePath(),
+      ALog.e(TAG, String.format("download failed，filePath: %s, url: %s", getEntity().getFilePath(),
           getEntity().getUrl()));
     } finally {
       if (file != null) {

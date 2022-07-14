@@ -39,7 +39,7 @@ final class AddCmd<T extends AbsTaskWrapper> extends AbsNormalCmd<T> {
       createTask();
       sendWaitState();
     } else {
-      ALog.w(TAG, "添加命令执行失败，【该任务已经存在】");
+      ALog.w(TAG, "Add command failed to execute，【The task already exists】");
     }
   }
 }

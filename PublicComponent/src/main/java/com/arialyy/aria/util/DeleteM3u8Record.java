@@ -79,7 +79,7 @@ public class DeleteM3u8Record implements IDeleteRecord {
     final String filePath = entity.getFilePath();
     TaskRecord record = DbDataHelper.getTaskRecord(filePath, entity.getTaskType());
     if (record == null) {
-      ALog.e(TAG, "删除下载记录失败，记录为空，将删除实体记录，filePath：" + entity.getFilePath());
+      ALog.e(TAG, "Failed to delete the download record, the record is empty, the entity record will be deleted，filePath：" + entity.getFilePath());
       deleteEntity(entity.getTaskType(), needRemoveEntity, filePath);
       return;
     }

@@ -261,12 +261,12 @@ public class ThreadTask implements IThreadTask, IThreadTaskObserver {
       return;
     }
     if (mTaskWrapper.isSupportBP()) {
-      ALog.d(TAG, String.format("任务【%s】thread__%s__停止【当前线程停止位置：%s】", getFileName(),
+      ALog.d(TAG, String.format("Task [%s] thread__%s__ stopped [current thread stop position: %s]", getFileName(),
           mRecord.threadId, stopLocation));
       writeConfig(false, stopLocation);
       return;
     }
-    ALog.i(TAG, String.format("任务【%s】已停止", getFileName()));
+    ALog.i(TAG, String.format("Mission [%s] has stopped", getFileName()));
   }
 
   /**

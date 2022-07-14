@@ -41,7 +41,7 @@ public class BaseExecutePool<TASK extends AbsTask> implements IPool<TASK> {
   }
 
   /**
-   * 获取最大任务数配置
+   * Get the maximum number of tasks configuration
    *
    * @return {@link AriaManager#getDownloadConfig()} {@link AriaManager#getUploadConfig()}，如果不设置，默认返回2
    */
@@ -50,7 +50,7 @@ public class BaseExecutePool<TASK extends AbsTask> implements IPool<TASK> {
   }
 
   /**
-   * 获取所有正在执行的任务
+   * Get all running tasks
    */
   public List<TASK> getAllTask() {
     return new ArrayList<>(mExecuteQueue);
@@ -59,11 +59,11 @@ public class BaseExecutePool<TASK extends AbsTask> implements IPool<TASK> {
   @Override public boolean putTask(TASK task) {
     synchronized (LOCK) {
       if (task == null) {
-        ALog.e(TAG, "任务不能为空！！");
+        ALog.e(TAG, "Task cannot be empty! !");
         return false;
       }
       if (mExecuteQueue.contains(task)) {
-        ALog.e(TAG, "任务【" + task.getTaskName() + "】进入执行队列失败，原因：已经在执行队列中");
+        ALog.e(TAG, "The task [" + task.getTaskName() + "] failed to enter the execution queue, reason: already in the execution queue");
         return false;
       } else {
         if (mExecuteQueue.size() >= mSize) {
@@ -79,7 +79,7 @@ public class BaseExecutePool<TASK extends AbsTask> implements IPool<TASK> {
   }
 
   /**
-   * 设置执行队列最大任务数
+   * Set the maximum number of tasks in the execution queue
    *
    * @param maxNum 下载数
    */
@@ -96,26 +96,26 @@ public class BaseExecutePool<TASK extends AbsTask> implements IPool<TASK> {
   }
 
   /**
-   * 添加新任务
+   * Add new task
    *
    * @param newTask 新任务
    */
   boolean putNewTask(TASK newTask) {
     synchronized (LOCK) {
       boolean s = mExecuteQueue.offer(newTask);
-      ALog.d(TAG, "任务【" + newTask.getTaskName() + "】进入执行队列" + (s ? "成功" : "失败"));
+      ALog.d(TAG, "Task [" + newTask.getTaskName() + "] enters the execution queue\" + (s ? \"Success\" : \"Failure");
       return s;
     }
   }
 
   /**
-   * 队列满时，将移除下载队列中的第一个任务
+   * When the queue is full, the first task in the download queue will be removed
    */
   boolean pollFirstTask() {
     synchronized (LOCK) {
       TASK oldTask = mExecuteQueue.pollFirst();
       if (oldTask == null) {
-        ALog.w(TAG, "移除任务失败，原因：任务为null");
+        ALog.w(TAG, "Failed to remove task, reason: task is null");
         return false;
       }
       oldTask.stop();
@@ -132,7 +132,7 @@ public class BaseExecutePool<TASK extends AbsTask> implements IPool<TASK> {
   @Override public TASK getTask(String key) {
     synchronized (LOCK) {
       if (TextUtils.isEmpty(key)) {
-        ALog.e(TAG, "key为null");
+        ALog.e(TAG, "key is null");
         return null;
       }
       for (TASK task : mExecuteQueue) {
@@ -152,7 +152,7 @@ public class BaseExecutePool<TASK extends AbsTask> implements IPool<TASK> {
   @Override public boolean removeTask(TASK task) {
     synchronized (LOCK) {
       if (task == null) {
-        ALog.e(TAG, "任务不能为空");
+        ALog.e(TAG, "Task cannot be empty");
         return false;
       } else {
         return removeTask(task.getKey());
@@ -163,7 +163,7 @@ public class BaseExecutePool<TASK extends AbsTask> implements IPool<TASK> {
   @Override public boolean removeTask(String key) {
     synchronized (LOCK) {
       if (TextUtils.isEmpty(key)) {
-        ALog.e(TAG, "key 为null");
+        ALog.e(TAG, "key is null");
         return false;
       }
 

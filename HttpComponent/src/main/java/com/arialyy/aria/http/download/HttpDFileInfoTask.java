@@ -241,7 +241,7 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
         || code == HttpURLConnection.HTTP_CREATED // 201 跳转
         || code == 307) {
       handleUrlReTurn(conn, conn.getHeaderField("Location"));
-    } else if (code == 416) { // 处理0k长度的文件的情况
+    } else if (code == 416) { // The case for processing files of 0k length
       ALog.w(TAG, "The file length is 0, breakpoints are not supported");
       mTaskWrapper.setSupportBP(false);
       mTaskWrapper.setNewTask(true);
@@ -327,10 +327,10 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
    * 处理30x跳转
    */
   private void handleUrlReTurn(HttpURLConnection conn, String newUrl) throws IOException {
-    ALog.d(TAG, "30x跳转，新url为【" + newUrl + "】");
+    ALog.d(TAG, "30x jump, the new url is [\" + newUrl + \"]");
     if (TextUtils.isEmpty(newUrl) || newUrl.equalsIgnoreCase("null")) {
       if (callback != null) {
-        callback.onFail(mEntity, new AriaHTTPException("获取重定向链接失败"), false);
+        callback.onFail(mEntity, new AriaHTTPException("Failed to get redirect link"), false);
       }
       return;
     }
@@ -340,7 +340,7 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
     }
 
     if (!CheckUtil.checkUrl(newUrl)) {
-      failDownload(new AriaHTTPException("下载失败，重定向url错误"), false);
+      failDownload(new AriaHTTPException("Download failed with redirect url error"), false);
       return;
     }
     taskOption.setRedirectUrl(newUrl);
@@ -363,14 +363,14 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
   }
 
   /**
-   * 检查长度是否合法，并且检查新获取的文件长度是否和数据库的文件长度一直，如果不一致，则表示该任务为新任务
+   * Check whether the length is legal, and check whether the length of the newly acquired file is the same as the length of the file in the database. If it is inconsistent, it means that the task is a new task
    *
-   * @param len 从服务器获取的文件长度
-   * @return {@code true}合法
+   * @param len The length of the file obtained from the server
+   * @return {@code true} legitimate
    */
   private boolean checkLen(long len) {
     if (len != mEntity.getFileSize()) {
-      ALog.d(TAG, "长度不一致，任务为新任务");
+      ALog.d(TAG, "The length is inconsistent, the task is a new task");
       mTaskWrapper.setNewTask(true);
     }
     return true;
@@ -393,7 +393,7 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
 
     @Override public long handleFileLen(Map<String, List<String>> headers) {
       if (headers == null || headers.isEmpty()) {
-        ALog.e(TAG, "header为空，获取文件长度失败");
+        ALog.e(TAG, "header is empty, get file length failed");
         return -1;
       }
       List<String> sLength = headers.get("Content-Length");
@@ -402,8 +402,8 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
       }
       String temp = sLength.get(0);
       long len = TextUtils.isEmpty(temp) ? -1 : Long.parseLong(temp);
-      // 某些服务，如果设置了conn.setRequestProperty("Range", "bytes=" + 0 + "-");
-      // 会返回 Content-Range: bytes 0-225427911/225427913
+      // Some services, if set conn.setRequestProperty("Range", "bytes=" + 0 + "-");
+      // will return Content-Range: bytes 0-225427911/225427913
       if (len < 0) {
         List<String> sRange = headers.get("Content-Range");
         if (sRange == null || sRange.isEmpty()) {
