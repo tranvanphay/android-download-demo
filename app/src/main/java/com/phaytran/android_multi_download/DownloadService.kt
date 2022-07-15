@@ -15,7 +15,14 @@ import com.arialyy.aria.core.listener.ISchedulers
 import com.arialyy.aria.core.task.DownloadTask
 import com.arialyy.aria.util.CommonUtil
 import com.phaytran.android_multi_download.App.Companion.CHANNEL_ID
+import java.io.*
+import java.net.HttpURLConnection
+import java.net.URL
 import java.security.AccessController.getContext
+import java.util.concurrent.Callable
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+import java.util.concurrent.Future
 
 
 class DownloadService : Service() {
@@ -49,7 +56,7 @@ class DownloadService : Service() {
             .ignoreFilePathOccupy()
             .setFilePath("$path/Download/$fileName")
             .create()
-
+        Log.e("IP:::",getPublicIPAddress()+"")
         val notificationBuilder =
             startNotification(fileName, notiId, ISchedulers.PRE, 0, null, "", null)
         if (!isCommandStart) {
@@ -100,22 +107,22 @@ class DownloadService : Service() {
             .setVibrate(longArrayOf(0L))
             .setAutoCancel(false) // clear notification after click
             .setOngoing(true)
-            .addAction(android.R.drawable.ic_menu_close_clear_cancel, status.let {
-                if (it == ISchedulers.STOP) {
-                    getString(R.string.btn_resume)
-                } else {
-                    getString(R.string.btn_pause)
-                }
-            }, buildNotificationActionButton(
-                status.let {
-                    if (it == ISchedulers.STOP) {
-                        RESUME_DOWNLOAD
-                    } else {
-                        PAUSE_DOWNLOAD
-                    }
-                }, taskId
-            )
-            )
+//            .addAction(android.R.drawable.ic_menu_close_clear_cancel, status.let {
+//                if (it == ISchedulers.STOP) {
+//                    getString(R.string.btn_resume)
+//                } else {
+//                    getString(R.string.btn_pause)
+//                }
+//            }, buildNotificationActionButton(
+//                status.let {
+//                    if (it == ISchedulers.STOP) {
+//                        RESUME_DOWNLOAD
+//                    } else {
+//                        PAUSE_DOWNLOAD
+//                    }
+//                }, taskId
+//            )
+//            )
             .addAction(
                 android.R.drawable.ic_menu_close_clear_cancel,
                 getString(R.string.btn_cancel),
@@ -191,8 +198,10 @@ class DownloadService : Service() {
 
     @RequiresApi(Build.VERSION_CODES.N)
     @Download.onTaskFail
-    fun taskFail(task: DownloadTask) {
+    fun taskFail(task: DownloadTask, onTaskFailed: Exception) {
         Log.e("Task failed ::: ", " ==> " + task.downloadEntity?.fileName)
+        Log.e("Task failed ::: ", " ==> " + onTaskFailed.printStackTrace())
+
         updateNoti(task, ISchedulers.FAIL, null)
 
     }
@@ -232,7 +241,7 @@ class DownloadService : Service() {
             it.url == task.downloadEntity.url
         }
         Log.e("NotificationCheck", "Object:: ${item?.percent} ::::: $current")
-        if (item?.percent != current) {
+//        if (item?.percent != current) {
             item?.percent = current
             val notificationBuilder = startNotification(
                 item?.fileName,
@@ -256,7 +265,7 @@ class DownloadService : Service() {
             val mNotificationManager =
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             mNotificationManager.notify(item.rowId!!, notificationBuilder.build())
-        }
+//        }
         if (status == ISchedulers.FAIL ||status==ISchedulers.STOP) {
             val notificationBuilder = startNotification(
                 item.fileName,
@@ -312,5 +321,41 @@ class DownloadService : Service() {
     override fun onBind(intent: Intent): IBinder? {
         Log.e("DownloadService ===> ", "On bind")
         return null
+    }
+    fun getPublicIPAddress(): String? {
+        var value: String? = null
+        val es: ExecutorService = Executors.newSingleThreadExecutor()
+        val result: Future<String?> = es.submit(object : Callable<String?> {
+            @Throws(java.lang.Exception::class)
+           override fun call(): String? {
+                try {
+                    val url = URL("http://whatismyip.akamai.com/")
+                    val urlConnection: HttpURLConnection = url.openConnection() as HttpURLConnection
+                    return try {
+                        val `in`: InputStream = BufferedInputStream(urlConnection.getInputStream())
+                        val r = BufferedReader(InputStreamReader(`in`))
+                        val total = StringBuilder()
+                        var line: String?
+                        while (r.readLine().also { line = it } != null) {
+                            total.append(line).append('\n')
+                        }
+                        urlConnection.disconnect()
+                        total.toString()
+                    } finally {
+                        urlConnection.disconnect()
+                    }
+                } catch (e: IOException) {
+                    Log.e("Public IP: ", e.message+"")
+                }
+                return null
+            }
+        })
+        try {
+            value = result.get()
+        } catch (e: java.lang.Exception) {
+            // failed
+        }
+        es.shutdown()
+        return value
     }
 }

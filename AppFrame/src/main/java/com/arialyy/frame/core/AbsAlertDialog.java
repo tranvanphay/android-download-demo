@@ -11,12 +11,12 @@ import com.arialyy.frame.util.StringUtil;
 
 /**
  * Created by lyy on 2015/11/4.
- * AlertDialog基类，具有5.0效果，需要配合 AlertDialog.Builder使用
- */
+ * AlertDialog base class, with 5.0 effect, needs to be used with AlertDialog.Builder
+ * */
 public abstract class AbsAlertDialog extends DialogFragment {
   protected String TAG = "";
 
-  private Object mObj;    //被观察者
+  private Object mObj;    //Observed
   private IOCProxy mProxy;
   private DialogSimpleModule mSimpleModule;
   private Dialog mDialog;
@@ -27,7 +27,7 @@ public abstract class AbsAlertDialog extends DialogFragment {
   }
 
   /**
-   * @param obj 被观察的对象
+   * @param obj object being observed
    */
   public AbsAlertDialog(Object obj) {
     mObj = obj;
@@ -46,9 +46,9 @@ public abstract class AbsAlertDialog extends DialogFragment {
   }
 
   /**
-   * 创建AlertDialog
-   * 建议使用AppCompatDialog，该Dialog具有5.0的效果
-   */
+   * Create AlertDialog
+   * It is recommended to use AppCompatDialog, which has the effect of 5.0
+   * */
   public abstract Dialog initAlertDialog();
 
   private void initDialog() {
@@ -63,7 +63,7 @@ public abstract class AbsAlertDialog extends DialogFragment {
   }
 
   /**
-   * 获取Module
+   * Get Module
    *
    * @param clazz {@link AbsModule}
    */
@@ -74,10 +74,10 @@ public abstract class AbsAlertDialog extends DialogFragment {
   }
 
   /**
-   * 获取Module
+   * Get Module
    *
    * @param clazz Module class0
-   * @param callback Module回调函数
+   * @param callback Module callback function
    * @param <M> {@link AbsModule}
    */
   protected <M extends AbsModule> M getModule(@NonNull Class<M> clazz,
@@ -89,11 +89,11 @@ public abstract class AbsAlertDialog extends DialogFragment {
   }
 
   /**
-   * 获取简单打Moduel回调，这个一般用于回调数据给寄主
-   */
+   * Get a simple Moduel callback, which is generally used to call back data to the host
+   * */
   protected DialogSimpleModule getSimplerModule() {
     if (mObj == null) {
-      throw new NullPointerException("必须设置寄主对象");
+      throw new NullPointerException("Host object must be set");
     }
     return mSimpleModule;
   }

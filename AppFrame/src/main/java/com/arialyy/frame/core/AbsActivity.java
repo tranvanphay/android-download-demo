@@ -18,7 +18,7 @@ import com.arialyy.frame.util.show.T;
 
 /**
  * Created by lyy on 2015/11/3.
- * 所有的 Activity都应该继承这个类
+ * All activities should inherit this class
  */
 public abstract class AbsActivity<VB extends ViewDataBinding> extends AppCompatActivity
     implements OnTempBtClickListener {
@@ -26,7 +26,7 @@ public abstract class AbsActivity<VB extends ViewDataBinding> extends AppCompatA
   private VB mBind;
   private IOCProxy mProxy;
   /**
-   * 第一次点击返回的系统时间
+   * The system time returned by the first click
    */
   private long mFirstClickTime = 0;
   protected AbsFrame mAm;
@@ -57,21 +57,21 @@ public abstract class AbsActivity<VB extends ViewDataBinding> extends AppCompatA
   }
 
   /**
-   * 获取填充View
+   * Get populated View
    */
   protected AbsTempView getTempView() {
     return mTempView;
   }
 
   /**
-   * 是否使用填充界面
+   * Whether to use the padding interface
    */
   protected void setUseTempView(boolean useTempView) {
     this.useTempView = useTempView;
   }
 
   /**
-   * 设置自定义的TempView
+   * Set custom TempView
    */
   protected void setCustomTempView(AbsTempView tempView) {
     mTempView = tempView;
@@ -79,7 +79,7 @@ public abstract class AbsActivity<VB extends ViewDataBinding> extends AppCompatA
   }
 
   /**
-   * 显示占位布局
+   * Show placeholder layout
    *
    * @param type {@link TempView#ERROR}
    * {@link TempView#DATA_NULL}
@@ -99,14 +99,14 @@ public abstract class AbsActivity<VB extends ViewDataBinding> extends AppCompatA
   }
 
   /**
-   * 关闭占位布局
+   * Turn off placeholder layout
    */
   protected void hintTempView() {
     hintTempView(0);
   }
 
   /**
-   * 延时关闭占位布局
+   * Delay closing placeholder layout
    */
   protected void hintTempView(int delay) {
     new Handler().postDelayed(new Runnable() {
@@ -147,19 +147,19 @@ public abstract class AbsActivity<VB extends ViewDataBinding> extends AppCompatA
   }
 
   /**
-   * 设置资源布局
+   * Set resource layout
    */
   protected abstract int setLayoutId();
 
   /**
-   * 获取binding对象
+   * Get the binding object
    */
   protected VB getBinding() {
     return mBind;
   }
 
   /**
-   * 获取Module
+   * Get Module
    *
    * @param clazz {@link AbsModule}
    */
@@ -171,10 +171,10 @@ public abstract class AbsActivity<VB extends ViewDataBinding> extends AppCompatA
   }
 
   /**
-   * 获取Module
+   * Get Module
    *
    * @param clazz Module class0
-   * @param callback Module回调函数
+   * @param callback Module callback function
    * @param <M> {@link AbsModule}
    */
   protected <M extends AbsModule> M getModule(@NonNull Class<M> clazz,
@@ -186,17 +186,17 @@ public abstract class AbsActivity<VB extends ViewDataBinding> extends AppCompatA
   }
 
   /**
-   * 数据回调
+   * data callback
    */
   protected abstract void dataCallback(int result, Object data);
 
   /**
-   * 双击退出
+   * Double click to exit
    */
   private boolean onDoubleClickExit(long timeSpace) {
     long currentTimeMillis = System.currentTimeMillis();
     if (currentTimeMillis - mFirstClickTime > timeSpace) {
-      T.showShort(this, "再按一次退出");
+      T.showShort(this, "Press again to exit");
       mFirstClickTime = currentTimeMillis;
       return false;
     } else {
@@ -205,23 +205,23 @@ public abstract class AbsActivity<VB extends ViewDataBinding> extends AppCompatA
   }
 
   /**
-   * 双击退出，间隔时间为2000ms
+   * Double click to exit, the interval is 2000ms
    */
   public boolean onDoubleClickExit() {
     return onDoubleClickExit(2000);
   }
 
   /**
-   * 退出应用程序
+   * Exit the application
    *
-   * @param isBackground 是否开开启后台运行,如果为true则为后台运行
+   * @param isBackground Whether to open the background running, if true, it is running in the background
    */
   public void exitApp(Boolean isBackground) {
     mAm.exitApp(isBackground);
   }
 
   /**
-   * 退出应用程序
+   * Exit the application
    */
   public void exitApp() {
     mAm.exitApp(false);

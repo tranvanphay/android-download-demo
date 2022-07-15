@@ -17,6 +17,8 @@
 package com.arialyy.aria.util;
 
 import android.text.TextUtils;
+import android.util.Log;
+
 import com.arialyy.aria.core.download.DownloadEntity;
 import com.arialyy.aria.core.download.DownloadGroupEntity;
 import com.arialyy.aria.core.upload.UploadEntity;
@@ -42,6 +44,7 @@ public class CheckUtil {
    * @return {@code true} ip 正确，{@code false} ip 错误
    */
   public static boolean checkIp(String ip) {
+    Log.e("IPAddress:::", ip);
     if (TextUtils.isEmpty(ip) || ip.length() < 7 || ip.length() > 15) {
       return false;
     }

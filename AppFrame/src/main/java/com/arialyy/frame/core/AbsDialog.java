@@ -10,11 +10,11 @@ import com.arialyy.frame.util.StringUtil;
 
 /**
  * Created by lyy on 2015/11/4.
- * 继承Dialog
+ * Inherit Dialog
  */
 public abstract class AbsDialog extends Dialog {
   protected String TAG = "";
-  private Object mObj;    //被观察者
+  private Object mObj;    //Observed
   private IOCProxy mProxy;
   private DialogSimpleModule mSimpleModule;
   private ModuleFactory mModuleF;
@@ -24,8 +24,7 @@ public abstract class AbsDialog extends Dialog {
   }
 
   /**
-   * @param obj Dialog的寄主
-   */
+   * @param obj Dialog's host   */
   public AbsDialog(Context context, Object obj) {
     super(context);
     mObj = obj;
@@ -45,17 +44,17 @@ public abstract class AbsDialog extends Dialog {
   }
 
   /**
-   * 获取简单打Moduel回调，这个一般用于回调数据给寄主
-   */
+   * Get a simple Moduel callback, which is generally used to call back data to the host
+   * */
   protected DialogSimpleModule getSimplerModule() {
     if (mObj == null) {
-      throw new NullPointerException("必须设置寄主对象");
+      throw new NullPointerException("Host object must be set");
     }
     return mSimpleModule;
   }
 
   /**
-   * 获取Module
+   * Get Module
    *
    * @param clazz {@link AbsModule}
    */
@@ -66,10 +65,10 @@ public abstract class AbsDialog extends Dialog {
   }
 
   /**
-   * 获取Module
+   * Get Module
    *
    * @param clazz Module class0
-   * @param callback Module回调函数
+   * @param callback Module callback function
    * @param <M> {@link AbsModule}
    */
   protected <M extends AbsModule> M getModule(@NonNull Class<M> clazz,
@@ -81,12 +80,12 @@ public abstract class AbsDialog extends Dialog {
   }
 
   /**
-   * 设置资源布局
+   * Set resource layout
    */
   protected abstract int setLayoutId();
 
   /**
-   * 数据回调
+   * data callback
    */
   protected abstract void dataCallback(int result, Object obj);
 }

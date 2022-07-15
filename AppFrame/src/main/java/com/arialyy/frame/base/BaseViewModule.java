@@ -6,7 +6,7 @@ import com.arialyy.frame.util.StringUtil;
 
 /**
  * Created by AriaL on 2017/11/26.
- * ViewModule只能是public
+ * ViewModule can only be public
  */
 
 public class BaseViewModule extends ViewModel {

@@ -33,7 +33,7 @@ import java.util.List;
 
 /**
  * Created by AriaL on 2017/6/27.
- * 删除所有任务，并且删除所有回掉
+ * delete all tasks and delete all
  */
 final public class CancelAllCmd<T extends AbsTaskWrapper> extends AbsNormalCmd<T> {
   /**
@@ -71,7 +71,7 @@ final public class CancelAllCmd<T extends AbsTaskWrapper> extends AbsNormalCmd<T
   }
 
   /**
-   * 删除所有下载任务组任务
+   * Delete all download task group tasks
    */
   private void removeAllDGTask() {
     List<DownloadGroupEntity> entities =
@@ -85,7 +85,7 @@ final public class CancelAllCmd<T extends AbsTaskWrapper> extends AbsNormalCmd<T
   }
 
   /**
-   * 删除所有普通上传任务
+   * Delete all normal upload tasks
    */
   private void removeUTask() {
     List<UploadEntity> entities =
@@ -100,7 +100,7 @@ final public class CancelAllCmd<T extends AbsTaskWrapper> extends AbsNormalCmd<T
 
   private void remove(AbsTaskWrapper te) {
     if (te == null) {
-      ALog.w(TAG, "取消任务失败，任务为空");
+      ALog.w(TAG, "Cancel task failed, task is empty");
       return;
     }
     if (te instanceof DTaskWrapper) {

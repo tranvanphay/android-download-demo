@@ -17,20 +17,20 @@ import java.io.OutputStream;
 
 /**
  * Created by Lyy on 2015/4/9.
- * 缓存抽象类，封装了缓存的读写操作
+ * Cache abstract class that encapsulates cache read and write operations
  */
 public abstract class AbsCache implements CacheParam {
   private static final String TAG = "AbsCache";
   /**
-   * 磁盘缓存工具
+   * Disk cache tool
    */
   private DiskLruCache mDiskLruCache = null;
   /**
-   * 内存缓存工具
+   * memory cache tool
    */
   private LruCache<String, byte[]> mMemoryCache = null;
   /**
-   * 是否使用内存缓存
+   * Whether to use memory cache
    */
   private boolean useMemory = false;
   private int mMaxMemory;
@@ -38,9 +38,9 @@ public abstract class AbsCache implements CacheParam {
   private static final Object mDiskCacheLock = new Object();
 
   /**
-   * 默认使用默认路径
+   * Use the default path by default
    *
-   * @param useMemory 是否使用内存缓存
+   * @param useMemory Whether to use memory cache
    */
   protected AbsCache(Context context, boolean useMemory) {
     this.mContext = context;
@@ -49,10 +49,10 @@ public abstract class AbsCache implements CacheParam {
   }
 
   /**
-   * 指定缓存文件夹
+   * Specify cache folder
    *
-   * @param useMemory 是否使用内存缓存
-   * @param cacheDir 缓存文件夹
+   * @param useMemory Whether to use memory cache
+   * @param cacheDir cache folder
    */
   protected AbsCache(Context context, boolean useMemory, @NonNull String cacheDir) {
     this.mContext = context;
@@ -66,7 +66,7 @@ public abstract class AbsCache implements CacheParam {
   }
 
   /**
-   * 初始化磁盘缓存
+   * Initialize disk cache
    */
   protected void initDiskCache(String cacheDir, int valueCount, long cacheSize) {
     try {
@@ -82,20 +82,20 @@ public abstract class AbsCache implements CacheParam {
   }
 
   /**
-   * 初始化内存缓存
+   * Initialize the memory cache
    */
   protected void initMemoryCache() {
     if (!useMemory) {
       return;
     }
-    // 获取应用程序最大可用内存
+    // Get the maximum available memory for the application
     mMaxMemory = (int) Runtime.getRuntime().maxMemory();
-    // 设置图片缓存大小为程序最大可用内存的1/8
+    // Set the image cache size to 1/8 of the program's maximum available memory
     mMemoryCache = new LruCache<>(mMaxMemory / 8);
   }
 
   /**
-   * 是否使用内存缓存
+   * Whether to use memory cache
    */
   protected void setUseMemory(boolean useMemory) {
     this.useMemory = useMemory;
@@ -103,18 +103,18 @@ public abstract class AbsCache implements CacheParam {
   }
 
   /**
-   * 设置内存缓存大小
+   * Set the memory cache size
    */
   protected void setMemoryCache(int size) {
     mMemoryCache.resize(size);
   }
 
   /**
-   * 打开某个目录下的缓存
+   * Open the cache in a directory
    *
-   * @param cacheDir 缓存目录，只需填写文件夹名，不需要写路径
-   * @param valueCount 指定同一个key可以对应多少个缓存文件，基本都是传1
-   * @param cacheSize 缓存大小
+   * @param cacheDir Cache directory, just fill in the folder name, no need to write the path
+   * @param valueCount Specify how many cache files the same key can correspond to, basically pass 1
+   * @param cacheSize cache size
    * @see CacheParam
    */
   protected void openDiskCache(@NonNull String cacheDir, int valueCount, long cacheSize) {
@@ -135,10 +135,10 @@ public abstract class AbsCache implements CacheParam {
   }
 
   /**
-   * 把缓存写入磁盘
+   * write cache to disk
    *
-   * @param key 缓存的key,通过该key来读写缓存，一般是URL
-   * @param data 缓存的数据
+   * @param key The cached key, through which the cache is read and written, usually a URL
+   * @param data cached data
    */
   protected void writeDiskCache(@NonNull String key, @NonNull byte[] data) {
     if (TextUtils.isEmpty(key)) {
@@ -150,7 +150,7 @@ public abstract class AbsCache implements CacheParam {
     }
     synchronized (mDiskCacheLock) {
       if (mDiskLruCache != null) {
-        L.i(TAG, "缓存数据到磁盘[key:" + key + ",hashKey:" + hashKey + "]");
+        L.i(TAG, "cache data to disk[key:" + key + ",hashKey:" + hashKey + "]");
         OutputStream out = null;
         try {
           DiskLruCache.Editor editor = mDiskLruCache.edit(hashKey);
@@ -177,10 +177,10 @@ public abstract class AbsCache implements CacheParam {
   }
 
   /**
-   * 从磁盘读取缓存
+   * read cache from disk
    *
-   * @param key 缓存的key，一般是原来的url
-   * @return 缓存数据
+   * @param key The cached key, usually the original url
+   * @return cache data
    */
   protected byte[] readDiskCache(@NonNull String key) {
     if (TextUtils.isEmpty(key)) {
@@ -195,7 +195,7 @@ public abstract class AbsCache implements CacheParam {
     }
     synchronized (mDiskCacheLock) {
       byte[] data = null;
-      L.i(TAG, "读取磁盘缓存数据[key:" + key + ",hashKey:" + hashKey + "]");
+      L.i(TAG, "Read disk cache data[key:" + key + ",hashKey:" + hashKey + "]");
       InputStream inputStream = null;
       try {
         DiskLruCache.Snapshot snapshot = mDiskLruCache.get(hashKey);
@@ -232,9 +232,9 @@ public abstract class AbsCache implements CacheParam {
   }
 
   /**
-   * 删除一条缓存
+   * delete a cache
    *
-   * @param key 该缓存的key
+   * @param key the cache key
    */
   protected void removeCache(@NonNull String key) {
     String hashKey = StringUtil.keyToHashKey(key);
@@ -258,7 +258,7 @@ public abstract class AbsCache implements CacheParam {
   }
 
   /**
-   * 清除所有缓存
+   * clear all cache
    */
   protected void clearCache() {
     if (mMemoryCache != null) {
@@ -276,10 +276,10 @@ public abstract class AbsCache implements CacheParam {
   }
 
   /**
-   * 关闭磁盘缓存，注意：
-   * 这个方法用于将DiskLruCache关闭掉，是和open()方法对应的一个方法。
-   * 关闭掉了之后就不能再调用DiskLruCache中任何操作缓存数据的方法，
-   * 通常只应该在Activity的onDestroy()方法中去调用close()方法。
+   * Turn off disk cache, note:
+   * This method is used to close DiskLruCache, which is a method corresponding to the open() method.
+   * After closing it, you can no longer call any method of operating the cached data in DiskLruCache.
+   * Usually you should only call the close() method in the Activity's onDestroy() method.
    */
   protected void closeDiskCache() {
     synchronized (mDiskCacheLock) {
@@ -294,9 +294,9 @@ public abstract class AbsCache implements CacheParam {
   }
 
   /**
-   * 同步内存中的缓存操作记录到日志文件（也就是journal文件）
-   * 注意：在写入缓存时需要flush同步一次，并不是每次写入缓存都要调用一次flush()方法的，频繁地调用并不会带来任何好处，
-   * 只会额外增加同步journal文件的时间。比较标准的做法就是在Activity的onPause()方法中去调用一次flush()方法就可以了
+   * Synchronous in-memory cache operations are recorded to the log file (that is, the journal file)
+   * Note: Flush synchronization is required once when writing to the cache. It is not necessary to call the flush() method every time the cache is written. Frequent calls will not bring any benefits.
+   * will only add additional time to sync journal files. The standard approach is to call the flush() method once in the onPause() method of the Activity.
    */
   protected void flushDiskCache() {
     synchronized (mDiskCacheLock) {
@@ -311,14 +311,14 @@ public abstract class AbsCache implements CacheParam {
   }
 
   /**
-   * 获取缓存大小
+   * get cache size
    */
   protected long getCacheSize() {
     return mDiskLruCache.size();
   }
 
   /**
-   * 转换byte数组为String
+   * Convert byte array to String
    */
   private static String bytesToHexString(byte[] bytes) {
     // http://stackoverflow.com/questions/332079
@@ -334,10 +334,10 @@ public abstract class AbsCache implements CacheParam {
   }
 
   /**
-   * 生成缓存文件夹
+   * Generate cache folder
    *
-   * @param uniqueName 缓存文件夹名
-   * @return 缓存文件夹
+   * @param uniqueName cache folder name
+   * @return cache folder
    */
   public static File getDiskCacheDir(Context context, String uniqueName) {
     return new File(AndroidUtils.getDiskCacheDir(context) + File.separator + uniqueName);

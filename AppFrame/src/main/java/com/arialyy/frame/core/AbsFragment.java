@@ -29,7 +29,7 @@ import java.lang.reflect.Field;
 
 /**
  * Created by lyy on 2015/11/4.
- * 基础Fragment
+ * Basic Fragment
  */
 public abstract class AbsFragment<VB extends ViewDataBinding> extends Fragment
     implements OnTempBtClickListener {
@@ -108,14 +108,14 @@ public abstract class AbsFragment<VB extends ViewDataBinding> extends Fragment
   protected abstract void init(Bundle savedInstanceState);
 
   /**
-   * 是否使用填充界面
+   * Whether to use the padding interface
    */
   protected void setUseTempView(boolean useTempView) {
     this.useTempView = useTempView;
   }
 
   /**
-   * 设置自定义的TempView
+   * Set custom TempView
    */
   protected void setCustomTempView(AbsTempView tempView) {
     mTempView = tempView;
@@ -123,7 +123,7 @@ public abstract class AbsFragment<VB extends ViewDataBinding> extends Fragment
   }
 
   /**
-   * 显示占位布局
+   * Show placeholder layout
    *
    * @param type {@link TempView#ERROR}
    * {@link TempView#DATA_NULL}
@@ -153,7 +153,7 @@ public abstract class AbsFragment<VB extends ViewDataBinding> extends Fragment
             vg.removeView(mTempView);
             vg.addView(mTempView, lp);
           } else {
-            L.e(TAG, "框架的填充只支持，LinearLayout、RelativeLayout、FrameLayout");
+            L.e(TAG, "The padding of the frame is only supported，LinearLayout、RelativeLayout、FrameLayout");
           }
         }
       } else {
@@ -164,14 +164,14 @@ public abstract class AbsFragment<VB extends ViewDataBinding> extends Fragment
   }
 
   /**
-   * 关闭占位布局
+   * Turn off placeholder layout
    */
   protected void hintTempView() {
     hintTempView(0);
   }
 
   /**
-   * 延时关闭占位布局
+   * Delay closing placeholder layout
    */
   protected void hintTempView(int delay) {
     new Handler().postDelayed(new Runnable() {
@@ -202,21 +202,21 @@ public abstract class AbsFragment<VB extends ViewDataBinding> extends Fragment
   }
 
   /**
-   * 获取填充View
+   * Get populated View
    */
   protected AbsTempView getTempView() {
     return mTempView;
   }
 
   /**
-   * 获取binding对象
+   * Get the binding object
    */
   protected VB getBinding() {
     return mBind;
   }
 
   /**
-   * 获取Module
+   * Get Module
    *
    * @param clazz {@link AbsModule}
    */
@@ -228,7 +228,7 @@ public abstract class AbsFragment<VB extends ViewDataBinding> extends Fragment
   }
 
   /**
-   * 获取Module
+   * Get Module
    *
    * @param clazz Module class0
    * @param callback Module回调函数
@@ -243,17 +243,17 @@ public abstract class AbsFragment<VB extends ViewDataBinding> extends Fragment
   }
 
   /**
-   * 延时加载
+   * lazy loading
    */
   protected abstract void onDelayLoad();
 
   /**
-   * 设置资源布局
+   * Set resource layout
    */
   protected abstract int setLayoutId();
 
   /**
-   * 数据回调
+   * data callback
    */
   protected abstract void dataCallback(int result, Object obj);
 

@@ -10,7 +10,7 @@ public class PathConstaant {
   private static final String WP_DIR = "windPath";
 
   /**
-   * 获取APK升级路径
+   * Get APK upgrade path
    */
   public static String getWpPath() {
     return Environment.getExternalStorageDirectory().getPath()

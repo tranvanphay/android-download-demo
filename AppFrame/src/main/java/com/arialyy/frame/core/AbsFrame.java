@@ -11,7 +11,7 @@ import java.util.Stack;
 
 /**
  * Created by lyy on 2015/11/4.
- * APP生命周期管理类管理
+ * APP life cycle management class management
  */
 public class AbsFrame {
   private static final String TAG = "AbsFrame";
@@ -31,7 +31,7 @@ public class AbsFrame {
   }
 
   /**
-   * 初始化框架
+   * Initialize the frame
    */
   public static AbsFrame init(Application app) {
     if (mManager == null) {
@@ -45,38 +45,38 @@ public class AbsFrame {
   }
 
   /**
-   * 获取AppManager管流程实例
+   * Get AppManager pipe process instance
    */
   public static AbsFrame getInstance() {
     if (mManager == null) {
-      throw new NullPointerException("请在application 的 onCreate 方法里面使用MVVMFrame.init()方法进行初始化操作");
+      throw new NullPointerException("Please use the MVVMFrame.init() method in the application's onCreate method to initialize");
     }
     return mManager;
   }
 
   /**
-   * 获取Activity栈
+   * Get the Activity stack
    */
   public Stack<AbsActivity> getActivityStack() {
     return mActivityStack;
   }
 
   /**
-   * 开启异常捕获
-   * 日志文件位于/data/data/Package Name/cache//crash/AbsExceptionFile.crash
-   */
+   * Enable exception catch
+   * The log file is located at /data/data/Package Name/cache//crash/AbsExceptionFile.crash
+   * */
   public void openCrashHandler() {
     openCrashHandler("", "");
   }
 
   /**
-   * 开启异常捕获
-   * 需要网络权限，get请求，异常参数，需要下面两个网络权限
-   * android:name="android.permission.INTERNET"
+   * Enable exception catch
+   * Need network permissions, get requests, exception parameters, the following two network permissions are required
+   * * android:name="android.permission.INTERNET"
    * android:name="android.permission.ACCESS_NETWORK_STATE"
    *
-   * @param serverHost 服务器地址
-   * @param key 数据传输键值
+   * @param serverHost server address
+   * @param key data transfer key
    */
   public AbsFrame openCrashHandler(String serverHost, String key) {
     CrashHandler handler = CrashHandler.getInstance(mContext);
@@ -86,21 +86,21 @@ public class AbsFrame {
   }
 
   /**
-   * 堆栈大小
+   * stack size
    */
   public int getActivitySize() {
     return mActivityStack.size();
   }
 
   /**
-   * 获取指定的Activity
+   * Get the specified Activity
    */
   public AbsActivity getActivity(int location) {
     return mActivityStack.get(location);
   }
 
   /**
-   * 添加Activity到堆栈
+   * Add Activity to stack
    */
   public void addActivity(AbsActivity activity) {
     if (mActivityStack == null) {
@@ -110,21 +110,21 @@ public class AbsFrame {
   }
 
   /**
-   * 获取当前Activity（堆栈中最后一个压入的）
+   * Get the current Activity (the last one pushed in the stack)
    */
   public AbsActivity getCurrentActivity() {
     return mActivityStack.lastElement();
   }
 
   /**
-   * 结束当前Activity（堆栈中最后一个压入的）
+   * End the current Activity (last pushed in the stack)
    */
   public void finishActivity() {
     finishActivity(mActivityStack.lastElement());
   }
 
   /**
-   * 结束指定的Activity
+   * End the specified Activity
    */
   public void finishActivity(AbsActivity activity) {
     if (activity != null) {
@@ -134,7 +134,7 @@ public class AbsFrame {
   }
 
   /**
-   * 移除指定的Activity
+   * Remove the specified Activity
    */
   public void removeActivity(AbsActivity activity) {
     if (activity != null) {
@@ -143,7 +143,7 @@ public class AbsFrame {
   }
 
   /**
-   * 结束指定类名的Activity
+   * End the Activity with the specified class name
    */
   public void finishActivity(Class<?> cls) {
     for (AbsActivity activity : mActivityStack) {
@@ -154,7 +154,7 @@ public class AbsFrame {
   }
 
   /**
-   * 结束所有Activity
+   * end all activities
    */
   public void finishAllActivity() {
     for (int i = 0, size = mActivityStack.size(); i < size; i++) {
@@ -166,9 +166,9 @@ public class AbsFrame {
   }
 
   /**
-   * 退出应用程序
+   * Exit the application
    *
-   * @param isBackground 是否开开启后台运行
+   * @param isBackground Whether to enable background operation
    */
   public void exitApp(Boolean isBackground) {
     try {
@@ -179,7 +179,7 @@ public class AbsFrame {
     } catch (Exception e) {
       FL.e(TAG, FL.getExceptionString(e));
     } finally {
-      // 注意，如果您有后台程序运行，请不要支持此句子
+// Note, don't support this sentence if you have a background program running
       if (!isBackground) {
         System.exit(0);
       }

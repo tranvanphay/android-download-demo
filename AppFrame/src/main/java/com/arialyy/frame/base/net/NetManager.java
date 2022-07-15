@@ -17,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by “Aria.Lao” on 2016/10/25.
- * 网络管理器
+ * network manager
  */
 public class NetManager {
   private static final Object LOCK = new Object();

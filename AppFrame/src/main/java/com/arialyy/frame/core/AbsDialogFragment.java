@@ -36,7 +36,7 @@ public abstract class AbsDialogFragment<VB extends ViewDataBinding> extends Dial
   }
 
   /**
-   * @param obj 被观察的对象
+   * @param obj object being observed
    */
   public AbsDialogFragment(Object obj) {
     this(STYLE_NO_TITLE, R.style.MyDialog, obj);
@@ -44,8 +44,8 @@ public abstract class AbsDialogFragment<VB extends ViewDataBinding> extends Dial
 
   /**
    * @param style DialogFragment.STYLE_NO_TITLE , STYLE_NO_FRAME; STYLE_NO_FRAME | STYLE_NO_TITLE
-   * @param theme Dialog风格
-   * @param obj 被观察的对象
+   * @param theme Dialog style
+   * @param obj object being observed
    */
   private AbsDialogFragment(int style, int theme, Object obj) {
     setStyle(style, theme);
@@ -89,29 +89,29 @@ public abstract class AbsDialogFragment<VB extends ViewDataBinding> extends Dial
   protected abstract void init(Bundle savedInstanceState);
 
   /**
-   * 获取简单打Moduel回调，这个一般用于回调数据给寄主
-   */
+   * Get a simple Moduel callback, which is generally used to call back data to the host
+   * */
   protected DialogSimpleModule getSimplerModule() {
     if (mObj == null) {
-      throw new NullPointerException("必须设置寄主对象");
+      throw new NullPointerException("Host object must be set");
     }
     return mSimpleModule;
   }
 
   /**
-   * 设置资源布局
+   * Set resource layout
    */
   protected abstract int setLayoutId();
 
   /**
-   * 获取binding对象
+   * Get the binding object
    */
   protected VB getBinding() {
     return mBind;
   }
 
   /**
-   * 获取Module
+   * Get Module
    *
    * @param clazz {@link AbsModule}
    */
@@ -123,10 +123,10 @@ public abstract class AbsDialogFragment<VB extends ViewDataBinding> extends Dial
   }
 
   /**
-   * 获取Module
+   * Get Module
    *
    * @param clazz Module class0
-   * @param callback Module回调函数
+   * @param callback Module callback function
    * @param <M> {@link AbsModule}
    */
   protected <M extends AbsModule> M getModule(@NonNull Class<M> clazz,
@@ -138,11 +138,11 @@ public abstract class AbsDialogFragment<VB extends ViewDataBinding> extends Dial
   }
 
   /**
-   * 统一的回调接口
+   * Unified callback interface
    *
-   * @param result 返回码，用来判断是哪个接口进行回调
-   * @param data 回调数据
-   */
+   * @param result return code, used to determine which interface is calling back
+   * * @param data callback data
+   * */
   protected abstract void dataCallback(int result, Object data);
 
   @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,

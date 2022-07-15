@@ -9,7 +9,7 @@ import rx.schedulers.Schedulers;
 
 /**
  * Created by “Aria.Lao” on 2016/10/26.
- * HTTP数据回调
+ * HTTP data callback
  */
 public abstract class HttpCallback<T> implements INetResponse<T>, Observable.Transformer<T, T> {
 

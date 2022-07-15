@@ -16,7 +16,7 @@ import okio.BufferedSource;
 
 /**
  * Created by Lyy on 2016/9/19.
- * 自定义的 OKHTTP 日志
+ * Custom OKHTTP logs
  */
 public class OkHttpLogger implements Interceptor {
   final static String TAG = "OKHTTP";

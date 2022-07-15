@@ -9,10 +9,10 @@ import com.google.gson.JsonParseException;
 import java.lang.reflect.Type;
 
 /**
- * 自定义Gson描述
+ * Custom Gson description
  * Created by “Aria.Lao” on 2016/10/26.
  *
- * @param <T> 服务器数据实体
+ * @param <T> server data entity
  */
 public class BasicDeserializer<T> implements JsonDeserializer<T> {
   @Override

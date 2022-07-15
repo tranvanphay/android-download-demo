@@ -15,7 +15,7 @@ import com.arialyy.frame.util.StringUtil;
 
 /**
  * Created by lyy on 2015/12/3.
- * 抽象的Popupwindow悬浮框
+ * Abstract Popupwindow floating frame
  */
 public abstract class AbsPopupWindow extends PopupWindow {
 
@@ -58,18 +58,18 @@ public abstract class AbsPopupWindow extends PopupWindow {
     mView = LayoutInflater.from(mContext).inflate(setLayoutId(), null);
     setContentView(mView);
     TAG = StringUtil.getClassName(this);
-    // 设置SelectPicPopupWindow弹出窗体的宽
+    // Set the width of the SelectPicPopupWindow popup form
     setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-    //// 设置SelectPicPopupWindow弹出窗体的高
+    //// Set the height of the SelectPicPopupWindow popup form
     setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
     setFocusable(true);
-    // 设置SelectPicPopupWindow弹出窗体动画效果
+    // Set the animation effect of the SelectPicPopupWindow pop-up form
     //        setAnimationStyle(R.style.wisdom_anim_style);
-    // 实例化一个ColorDrawable颜色为半透明
+    // Instantiate a ColorDrawable color for translucent
     if (mBackground == null) {
       mBackground = new ColorDrawable(Color.parseColor("#4f000000"));
     }
-    // 设置SelectPicPopupWindow弹出窗体的背景
+    // Set the background of the SelectPicPopupWindow pop-up form
     setBackgroundDrawable(mBackground);
   }
 
@@ -106,11 +106,11 @@ public abstract class AbsPopupWindow extends PopupWindow {
   }
 
   /**
-   * 获取简单打Moduel回调，这个一般用于回调数据给寄主
+   * Get a simple call to the Moduel callback, which is generally used to call back data to the host
    */
   protected DialogSimpleModule getSimplerModule() {
     if (mObj == null) {
-      throw new NullPointerException("必须设置寄主对象");
+      throw new NullPointerException("Host object must be set");
     }
     return mSimpleModule;
   }
@@ -120,12 +120,12 @@ public abstract class AbsPopupWindow extends PopupWindow {
   }
 
   /**
-   * 设置资源布局
+   * Set resource layout
    */
   protected abstract int setLayoutId();
 
   /**
-   * 数据回调
+   * data callback
    */
   protected abstract void dataCallback(int result, Object obj);
 }

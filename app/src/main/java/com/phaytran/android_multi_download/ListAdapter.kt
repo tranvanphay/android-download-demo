@@ -1,8 +1,10 @@
 package com.phaytran.android_multi_download
 
 import android.annotation.SuppressLint
+import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -14,12 +16,13 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.RecyclerView
-import com.arialyy.aria.core.Aria
 import com.arialyy.aria.core.task.DownloadTask
 import com.arialyy.aria.util.CommonUtil
 import com.google.android.material.progressindicator.LinearProgressIndicator
-import java.security.AccessController.getContext
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class ListAdapter (private val context: Context, private val FileInfoList: ArrayList<FileInfo>) : RecyclerView.Adapter<ListAdapter.ViewHolder>(), View.OnClickListener {
@@ -120,6 +123,25 @@ class ListAdapter (private val context: Context, private val FileInfoList: Array
             R.id.btnDownload -> {
 
             }
+        }
+    }
+
+    fun downloadFile() {
+        val DownloadUrl: String = "http://download005.fshare.vn/dl/pWNLLlytzIOgstb-w4Lby+4m2b21Zy0FPMoHcvZvF8mmUSuCUoe1R7SjSYd98ZYtu0F4IDjj5-t7ruX-/12.Days.of.Christmas.2020.1080p.WEB-DL.DD5.1.H.264-EVO%5BEtHD%5D.mkv"
+        val request1: DownloadManager.Request = DownloadManager.Request(Uri.parse(DownloadUrl))
+        request1.setDescription("Sample Music File") //appears the same in Notification bar while downloading
+        request1.setTitle("File1.mp3")
+        request1.setVisibleInDownloadsUi(false)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            request1.allowScanningByMediaScanner()
+            request1.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN)
+        }
+        request1.setDestinationInExternalFilesDir(context, "/File", "Question1.mp3")
+        val manager1: DownloadManager? =
+            context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager?
+        Objects.requireNonNull(manager1)?.enqueue(request1)
+        if (DownloadManager.STATUS_SUCCESSFUL === 8) {
+            Log.e("Status","Success")
         }
     }
 
